@@ -3,7 +3,7 @@
 
 #include <string>
 #include <iostream>
-#include "miscelaneos.h"
+
 
 class Fecha
 {
@@ -15,15 +15,8 @@ private:
 
 public:
 
-    Fecha(unsigned char d,unsigned char m, unsigned int a)
-    {
-        if (esvalida(d,m,a)
-        {
-            dia=d;
-            mes=m;
-            anio=a;
-        }
-    }
+    Fecha(unsigned char d, unsigned char m, unsigned int a)
+        : dia(d), mes(m), anio(a) {}
     ~Fecha(){}
 
 
