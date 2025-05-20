@@ -1,45 +1,67 @@
 #include "reserva.h"
-#include <iostream>
 using namespace std;
 
-Reserva::Reserva(string notas, Fecha& fEntrada, Fecha& fSalida, Fecha& fPago, unsigned int m,
-        unsigned char* dHuesped, unsigned char* cAlojamiento, unsigned char* cReserva,
-        unsigned char d, bool mPago):
-    fechaEntrada(fEntrada), fechaSalida(fSalida), fechaPago(fPago), duracion(d),
-    codigoReserva(cReserva), codigoAlojamiento(cAlojamiento), documentoHuesped(dHuesped),
-    anotaciones(notas), metodoDePago(mPago), monto(m){}
+Reserva::Reserva(string notas,
+                 Fecha &fEntrada,
+                 Fecha &fSalida,
+                 Fecha &fPago,
+                 unsigned int m,
+                 unsigned char *dHuesped,
+                 unsigned int *cAlojamiento,
+                 unsigned int cReserva,
+                 unsigned char d,
+                 bool mPago) : anotaciones(notas), fechaEntrada(fEntrada), fechaSalida(fSalida), fechaPago(fPago),
+                               monto(m), documentoHuesped(dHuesped), codigoAlojamiento(cAlojamiento),
+                               codigoReserva(cReserva), duracion(d), metodoDePago(mPago) {}
 
-Fecha Reserva::getFechaEntrada() const {
+string Reserva::getAnotaciones() const
+{
+    return anotaciones;
+}
+
+Fecha Reserva::getFechaEntrada() const
+{
     return fechaEntrada;
 }
-unsigned char Reserva::getDuracion() const{
-    return duracion;
-}
-Fecha Reserva::getFechaSalida() const{
+
+Fecha Reserva::getFechaSalida() const
+{
     return fechaSalida;
 }
 
-unsigned char* Reserva::getCodigoAlojamiento() const{
-    cout << codigoAlojamiento << endl;
-    return codigoAlojamiento;
+Fecha Reserva::getFechaPago() const
+{
+    return fechaPago;
 }
 
-unsigned char* Reserva::getDocumentoHuesped() const{
+unsigned int Reserva::getMonto() const
+{
+    return monto;
+}
+
+unsigned char *Reserva::getDocumentoHuesped() const
+{
     return documentoHuesped;
 }
 
-bool Reserva::getMetodoPago() const {
+unsigned int *Reserva::getCodigoAlojamiento() const
+{
+    return codigoAlojamiento;
+}
+
+unsigned int Reserva::getCodigoReserva() const
+{
+    return codigoReserva;
+}
+
+unsigned char Reserva::getDuracion() const
+{
+    return duracion;
+}
+
+bool Reserva::getMetodoPago() const
+{
     return metodoDePago;
 }
 
-Fecha Reserva::getFechaPago() const{
-    return fechaPago;
-}
-unsigned int Reserva::getMonto() const{
-    return monto;}
-
-string Reserva::getAnotaciones() const{
-    return anotaciones;}
-
-Reserva::~Reserva(){}
-
+Reserva::~Reserva() {}

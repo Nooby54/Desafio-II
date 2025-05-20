@@ -7,32 +7,40 @@ using namespace std;
 class Reserva
 {
 private:
+    string anotaciones;
     Fecha fechaEntrada;
     Fecha fechaSalida;
     Fecha fechaPago;
-    unsigned char duracion;
-    unsigned char* codigoReserva;
-    unsigned char* codigoAlojamiento;
-    unsigned char* documentoHuesped;
-    string anotaciones;
-    bool metodoDePago;
     unsigned int monto;
+    unsigned char *documentoHuesped;
+    unsigned int *codigoAlojamiento;
+    unsigned int codigoReserva;
+    unsigned char duracion;
+    bool metodoDePago;
 
 public:
+    Reserva(string notas,
+            Fecha &fEntrada,
+            Fecha &fSalida,
+            Fecha &fPago,
+            unsigned int m,
+            unsigned char *dHuesped,
+            unsigned int *cAlojamiento,
+            unsigned int cReserva,
+            unsigned char d,
+            bool mPago);
 
-    Reserva(string notas, Fecha& fEntrada, Fecha& fSalida, Fecha& fPago, unsigned int m,
-            unsigned char *dHuesped, unsigned char *cAlojamiento, unsigned char *cReserva,
-            unsigned char d, bool metodoPago);
-
+    string getAnotaciones() const;
     Fecha getFechaEntrada() const;
-    unsigned char getDuracion() const;
     Fecha getFechaSalida() const;
-    unsigned char* getCodigoAlojamiento() const;
-    unsigned char* getDocumentoHuesped() const;
-    bool getMetodoPago() const;
     Fecha getFechaPago() const;
     unsigned int getMonto() const;
-    string getAnotaciones() const;
+    unsigned char *getDocumentoHuesped() const;
+    unsigned int *getCodigoAlojamiento() const;
+    unsigned int getCodigoReserva() const;
+    unsigned char getDuracion() const;
+    bool getMetodoPago() const;
+
     ~Reserva();
 };
 

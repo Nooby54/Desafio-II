@@ -20,6 +20,11 @@ private:
     }
 
 public:
+    Fecha(const Fecha& otra) {
+    dia = otra.dia;
+    mes = otra.mes;
+    anio = otra.anio;
+    }
 
     Fecha(unsigned char d, unsigned char m, unsigned short int a)
         : dia(d), mes(m), anio(a) {}
