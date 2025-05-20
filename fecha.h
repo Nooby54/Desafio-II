@@ -2,9 +2,6 @@
 #define FECHA_H
 
 #include <string>
-#include <iostream>
-
-
 class Fecha
 {
 private:
@@ -12,6 +9,15 @@ private:
     unsigned char mes;
     unsigned int anio;
 
+    unsigned char obtenerDiasMes() const
+    {
+        switch (mes)
+        {
+        case 2: return ((anio % 4 == 0 && anio % 100 != 0) || (anio % 400 == 0)) ? 29 : 28;
+        case 4: case 6: case 9: case 11: return 30;
+        default: return 31;
+        }
+    }
 
 public:
 
