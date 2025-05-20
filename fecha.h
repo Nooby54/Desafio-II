@@ -7,7 +7,7 @@ class Fecha
 private:
     unsigned char dia;
     unsigned char mes;
-    unsigned int anio;
+    unsigned short int anio;
 
     unsigned char obtenerDiasMes() const
     {
@@ -21,29 +21,10 @@ private:
 
 public:
 
-    Fecha(unsigned char d, unsigned char m, unsigned int a)
+    Fecha(unsigned char d, unsigned char m, unsigned short int a)
         : dia(d), mes(m), anio(a) {}
     ~Fecha(){}
 
-
-
-    Fecha calcularFechaDias(const Fecha& inicio, unsigned char dias)const
-    {
-        Fecha nuevaFecha = inicio;
-        nuevaFecha.dia += dias;
-
-        while (nuevaFecha.dia > obtenerDiasMes(nuevaFecha.mes, nuevaFecha.anio))
-        {
-            nuevaFecha.dia -= obtenerDiasMes(nuevaFecha.mes, nuevaFecha.anio);
-            nuevaFecha.mes++;
-            if (nuevaFecha.mes > 12)
-            {
-                nuevaFecha.mes = 1;
-                nuevaFecha.anio++;
-            }
-        }
-        return nuevaFecha;
-    }
 
     std::string obtenerDiaSemana()const
     {
@@ -63,16 +44,73 @@ public:
         return dia;
     }
 
-
-    unsigned char getAnio() const
+    unsigned short int getAnio() const
     {
         return anio;
     }
-
-    Fecha operator=(Fecha& otra) const
+    unsigned char getMes() const
     {
-        return Fecha(otra.dia, otra.mes, otra.anio);
+        return mes;
     }
+    Fecha& operator-=(unsigned char dias)
+    {
+        while (dias >= this->dia)
+        {
+            dias -= this->dia;
+            this->mes--;
+
+            if (this->mes < 1)
+            {
+                this->mes = 12;
+                this->anio--;
+            }
+
+            this->dia = this->obtenerDiasMes();
+        }
+
+        this->dia -= dias;
+        return *this;
+    }
+
+
+    Fecha& operator=(const Fecha& otra)
+    {
+        if (this != &otra)
+        {
+            this->dia = otra.dia;
+            this->mes = otra.mes;
+            this->anio = otra.anio;
+        }
+        return *this;
+    }
+    Fecha& operator+=(unsigned char dias)
+    {
+        this->dia += dias;
+
+        while (true)
+        {
+            unsigned char diasMes = this->obtenerDiasMes();
+            if (this->dia <= diasMes) break;
+
+            this->dia -= diasMes;
+            this->mes++;
+            if (this->mes > 12)
+            {
+                this->mes = 1;
+                this->anio++;
+            }
+        }
+        return *this;
+    }
+    Fecha& operator--()
+    {
+        return (*this -= 1);
+    }
+    Fecha& operator++()
+    {
+        return (*this += 1);
+    }
+
     bool operator==(const Fecha& otra) const
     {
         return dia == otra.dia && mes == otra.mes && anio == otra.anio;
