@@ -1,12 +1,14 @@
 #include "huesped.h"
 
-Huesped::Huesped(unsigned char* dH, float p, unsigned char aM, Reserva* rH):
-    documentoHuesped(dH),puntuacion(p), antiguedadMeses(aM), reservas(rH){}
+Huesped::Huesped(unsigned char (&dH)[11], float p, unsigned char aM, Reserva** rH):
+    puntuacion(p), antiguedadMeses(aM), reservas(rH){
+    memcpy(documentoHuesped,dH,11);
+}
 
-Reserva* Huesped::getReservas(){
+Reserva **Huesped::getReservas(){
     return reservas;
 }
-void Huesped::setReservas(Reserva* &nReservas){
+void Huesped::setReservas(Reserva** &nReservas){
     reservas = nReservas;
 }
 unsigned char* Huesped::getDocumento(){
@@ -19,8 +21,3 @@ unsigned char Huesped::getPuntuacion(){
 unsigned char Huesped::getAntiguedadMeses(){
     return antiguedadMeses;
 }
-/*
-Reserva* redimensionarReserva(Reserva* reservasHuesped, unsigned char tamanio){
-    Reserva* hola = new Reserva[ + tamanio]
-
-}*/

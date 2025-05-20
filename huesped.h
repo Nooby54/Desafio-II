@@ -5,18 +5,18 @@
 class Huesped
 {
 private:
-    unsigned char* documentoHuesped;
+    unsigned char documentoHuesped[11];
     float puntuacion;
     unsigned char antiguedadMeses;
-    Reserva* reservas;
+    Reserva** reservas;
+
 public:
-    Huesped(unsigned char* dH, float p, unsigned char aM, Reserva* rH = nullptr);
-    Reserva* getReservas();
-    void setReservas(Reserva* &nreservas);
+    Huesped(unsigned char (&documentoHuesped)[11], float p, unsigned char aM, Reserva **rH);
+    Reserva** getReservas();
+    void setReservas(Reserva** &nreservas);
     unsigned char* getDocumento();
     unsigned char getPuntuacion();
     unsigned char getAntiguedadMeses();
-    Reserva* redimensionarReserva(Reserva* reservasHuesped, unsigned char tamaño) const;
 };
 
 #endif // HUESPED_H
