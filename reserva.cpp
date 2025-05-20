@@ -42,7 +42,5 @@ Reserva Reserva::operator= (Reserva& reserva) const {
                    reserva.codigoAlojamiento,reserva.documentoHuesped,reserva.metodoDePago,reserva.fechaPago,
                    reserva.monto,reserva.anotaciones);
 }
-Reserva::~Reserva(){
-    //delete[] this;
-}
+Reserva::~Reserva(){}
 
