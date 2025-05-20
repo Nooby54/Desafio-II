@@ -8,6 +8,7 @@ CONFIG += c++17 cmdline
 
 SOURCES += \
         main.cpp \
+        reserva.cpp \
         miscelaneos.cpp
 
 # Default rules for deployment.
@@ -16,5 +17,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    reserva.h \
     miscelaneos.h \
     fecha.h
