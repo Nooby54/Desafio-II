@@ -7,23 +7,28 @@ using namespace std;
 class Reserva
 {
 private:
-    Fecha fechaEntrada,fechaSalida,fechaPago;
+    Fecha fechaEntrada;
+    Fecha fechaSalida;
+    Fecha fechaPago;
     unsigned char duracion;
-    string codigoReserva,codigoAlojamiento,documentoHuesped,anotaciones;
+    unsigned char* codigoReserva;
+    unsigned char* codigoAlojamiento;
+    unsigned char* documentoHuesped;
+    string anotaciones;
     bool metodoDePago;
     unsigned int monto;
 
 public:
-    Reserva(Fecha& fEntrada, unsigned char d, Fecha& fSalida,
-            string cReserva, string& cAlojamiento,
-            string& dHuesped, bool mPago,
-            Fecha& fPago, unsigned int m, string notas);
+
+    Reserva(string notas, Fecha& fEntrada, Fecha& fSalida, Fecha& fPago, unsigned int m,
+            unsigned char *dHuesped, unsigned char *cAlojamiento, unsigned char *cReserva,
+            unsigned char d, bool metodoPago);
 
     Fecha getFechaEntrada() const;
     unsigned char getDuracion() const;
     Fecha getFechaSalida() const;
-    string getCodigoAlojamiento() const;
-    string getDocumentoHuesped() const;
+    unsigned char* getCodigoAlojamiento() const;
+    unsigned char* getDocumentoHuesped() const;
     bool getMetodoPago() const;
     Fecha getFechaPago() const;
     unsigned int getMonto() const;
