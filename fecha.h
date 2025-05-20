@@ -3,8 +3,9 @@
 
 #include <string>
 #include <iostream>
+#include "miscelaneos.h"
 
-class fecha
+class Fecha
 {
 private:
     unsigned char dia;
@@ -14,50 +15,20 @@ private:
 
 public:
 
-    Fecha(unsigned char&d,unsigned char& m, unsigned int a)
+    Fecha(unsigned char d,unsigned char m, unsigned int a)
     {
-        if (esvalida(fecha(d,m,a)))
+        if (esvalida(d,m,a)
         {
             dia=d;
             mes=m;
             anio=a;
         }
-        else
-        {
-            std::cout<<"Error: Fecha ingresada inválida"<<std::endl;
-        }
     }
     ~Fecha(){}
 
-    static bool esvalida(unsigned char&d,unsigned char& m, unsigned int a)
-    {
-        if (m<1||m>12)
-        {
-            return false;
-        }
-        unsigned char diaMes=obtenerDiasMes(m,a);
-        return(d>=1 && d<diaMes);
-    }
-	//para calcular en añlos bisiestos
-    static unsigned char obtenerDiasMes(unsigned char mes, unsigned int anio)
-    {
-        switch (mes) {
-        case 2:
-            if ((anio % 4 == 0 && anio % 100 != 0) || (anio % 400 == 0)) {
-                return 29;
-            } else {
-                return 28;
-            }
-        case 4: case 6: case 9: case 11: // Meses con 30 días
-            return 30;
-        case 1: case 3: case 5: case 7: case 8: case 10: case 12: // Meses con 31 días
-            return 31;
-        default:
-            std::cout << "Error: Mes inválido." << std::endl;
-            return 0;
-        }
-    }
-    Fecha calcularFechaDias(const Fecha& inicio, unsigned short int dias)const
+
+
+    Fecha calcularFechaDias(const Fecha& inicio, unsigned char dias)const
     {
         Fecha nuevaFecha = inicio;
         nuevaFecha.dia += dias;
@@ -99,7 +70,7 @@ public:
         return anio;
     }
 
-    Fecha operator=(const Fecha& otra) const
+    Fecha operator=(Fecha& otra) const
     {
         return Fecha(otra.dia, otra.mes, otra.anio);
     }
