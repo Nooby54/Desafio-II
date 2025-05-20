@@ -15,7 +15,7 @@ public:
     Reserva** getReservas();
     void setReservas(Reserva** &nreservas);
     unsigned char* getDocumento();
-    unsigned char getPuntuacion();
+    float getPuntuacion();
     unsigned char getAntiguedadMeses();
 };
 

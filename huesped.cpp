@@ -15,7 +15,7 @@ unsigned char* Huesped::getDocumento(){
     return documentoHuesped;
 }
 
-unsigned char Huesped::getPuntuacion(){
+float Huesped::getPuntuacion(){
     return puntuacion;
 }
 unsigned char Huesped::getAntiguedadMeses(){
