@@ -33,7 +33,6 @@ public:
     Fecha getFechaPago() const;
     unsigned int getMonto() const;
     string getAnotaciones() const;
-    Reserva operator= (Reserva&) const;
     ~Reserva();
 };
 
