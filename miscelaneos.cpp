@@ -1,4 +1,7 @@
 #include "miscelaneos.h"
+#include <iostream>
+
+using namespace std;
 
 
 bool esValida(unsigned char d, unsigned char m, unsigned short int a)
@@ -13,5 +16,33 @@ bool esValida(unsigned char d, unsigned char m, unsigned short int a)
         diasMes = 30;
 
     return (d >= 1 && d <= diasMes);
+}
+
+string validarAnotaciones(){
+    string anotaciones;
+    cout << "Ingrese las anotaciones: ";
+    cin >> anotaciones;
+    while(anotaciones.length()>1000){
+        cout << "Demasiadas anotaciones, intenta ser mas preciso";
+        cin >> anotaciones;
+        }
+    return anotaciones;
+}
+
+Fecha validarFecha(string id){
+    string dia, mes;
+    unsigned short int anio;
+    do{
+        cout << "Ingrese el dia de " + id + ": ";
+        cin >> dia;
+
+        cout << "Ingrese el mes de " + id + ": ";
+        cin >> mes;
+
+        cout << "Ingrese el anio de " + id + ": ";
+        cin >> anio;
+    }
+    while(!esValida(static_cast<unsigned char>(stoi(dia)),static_cast<unsigned char>(stoi(mes)),anio));
+    return Fecha(*dia.c_str(),*mes.c_str(),anio);
 }
 
