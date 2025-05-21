@@ -28,8 +28,7 @@ public:
         tipo(tipoAloj), direccion(dir), precioNoche(precio),
         reservasVigentes(reservas), cantidadReservas(cantidad)
     {
-        for (unsigned char i = 0; i < 5; i++)
-            amenidades[i] = ameni[i];
+        memcpy(amenidades, ameni, 5 * sizeof(bool));
     }
 
     ~Alojamiento() {}
