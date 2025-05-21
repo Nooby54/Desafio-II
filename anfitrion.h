@@ -8,15 +8,15 @@ class Alojamiento;
 class Anfitrion
 {
 private:
-    std::string nombreAnfitrion;
+
     unsigned char documentoAnfitrion[11];
     float puntuacion;
     unsigned char antiguedadMeses;
     Alojamiento** alojamientos;
 
 public:
-    Anfitrion(std::string nombre, unsigned char (&documento)[11], float p, unsigned char antiguedad, Alojamiento** alojamientos)
-        : nombreAnfitrion(nombre), puntuacion(p), antiguedadMeses(antiguedad), alojamientos(alojamientos)
+    Anfitrion(unsigned char (&documento)[11], float p, unsigned char antiguedad, Alojamiento** alojamientos)
+        : puntuacion(p), antiguedadMeses(antiguedad), alojamientos(alojamientos)
     {
         for (unsigned char i = 0; i < 11; i++)
             documentoAnfitrion[i] = documento[i];
@@ -24,7 +24,6 @@ public:
 
     ~Anfitrion() {}
 
-    std::string getNombreAnfitrion() const { return nombreAnfitrion; }
     unsigned char* getDocumentoAnfitrion() { return documentoAnfitrion; }
     float getPuntuacion() const { return puntuacion; }
     unsigned char getAntiguedadMeses() const { return antiguedadMeses; }
