@@ -19,6 +19,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     huesped.h \
+    alojamiento.h \
     reserva.h \
     miscelaneos.h \
     fecha.h
