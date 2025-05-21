@@ -18,6 +18,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    anfitrion.h \
     huesped.h \
     alojamiento.h \
     reserva.h \
