@@ -3,7 +3,9 @@
 
 #include <string>
 #include "reserva.h"
-#include "anfitrion.h"
+
+class Anfitrion;
+
 class Alojamiento
 {
 private:
@@ -17,32 +19,24 @@ private:
     unsigned int precioNoche;
     bool amenidades[5];
     Reserva** reservasVigentes;
-    unsigned char cantidadReservas;
 
 public:
     Alojamiento(std::string nombre, unsigned int codigo, Anfitrion* anfitrion,
                 std::string depto, std::string mun, bool tipoAloj, std::string dir,
-                unsigned int precio, bool ameni[5], Reserva** reservas, unsigned char cantidad)
-        : nombreAlojamiento(nombre), codigoIdentificador(codigo),
-        anfitrionResponsable(anfitrion), departamento(depto), municipio(mun),
-        tipo(tipoAloj), direccion(dir), precioNoche(precio),
-        reservasVigentes(reservas), cantidadReservas(cantidad)
-    {
-        memcpy(amenidades, ameni, 5 * sizeof(bool));
-    }
+                unsigned int precio, bool ameni[5], Reserva** reservas);
 
-    ~Alojamiento() {}
+    ~Alojamiento();
 
-    std::string getNombreAlojamiento() const { return nombreAlojamiento; }
-    unsigned int getCodigoIdentificador() const { return codigoIdentificador; }
-    Anfitrion* getAnfitrionRespon() const { return anfitrionResponsable; }
-    std::string getDepartamento() const { return departamento; }
-    std::string getMunicipio() const { return municipio; }
-    bool getTipo() const { return tipo; }
-    std::string getDireccion() const { return direccion; }
-    unsigned int getPrecioNoche() const { return precioNoche; }
-    bool* getAmenidades() { return amenidades; }
-    Reserva** getReservasVigentes() const { return reservasVigentes; }
+    std::string getNombreAlojamiento() const;
+    unsigned int getCodigoIdentificador() const;
+    Anfitrion* getAnfitrionRespon() const;
+    std::string getDepartamento() const;
+    std::string getMunicipio() const;
+    bool getTipo() const;
+    std::string getDireccion() const;
+    unsigned int getPrecioNoche() const;
+    bool* getAmenidades();
+    Reserva** getReservasVigentes() const;
 };
 
 #endif // ALOJAMIENTO_H
