@@ -18,14 +18,16 @@ public:
     ~Fecha();
 
     std::string obtenerDiaSemana() const;
+    std::string imprimirFecha() const;
 
     unsigned char getDia() const;
     unsigned short int getAnio() const;
     unsigned char getMes() const;
 
+
     Fecha& operator-=(unsigned char dias);
-    Fecha& operator=(const Fecha& otra);
     Fecha& operator+=(unsigned char dias);
+    Fecha& operator=(const Fecha& otra);
     Fecha& operator--();
     Fecha& operator++();
 
