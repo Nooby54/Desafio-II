@@ -1,9 +1,9 @@
 #include "miscelaneos.h"
+#include "alojamiento.h"
 #include "huesped.h"
-#include <algorithm>
-#include <bitset>
 #include <iostream>
 #include <fstream>
+
 
 using namespace std;
 
@@ -72,5 +72,89 @@ unsigned int contarLineasArchivos(string nombreArchivo){
     return contadorLineas;
 }
 
+Alojamiento** cargarAlojamientos(string nombreArchivo, unsigned int &cantidad) {
+    unsigned int lineas = contarLineasArchivos(nombreArchivo);
+    Alojamiento** alojamientos = new Alojamiento*[lineas];
 
+    ifstream archivo(nombreArchivo);
+    string lineaArchivo;
 
+    while (getline(archivo, lineaArchivo)) {
+        unsigned int codigo = 0, precio = 0, i = 0;
+        string nombre = "", documento = "", departamento = "", municipio = "", direccion = "";
+        bool amenidades[5], tipo;
+        Reserva** reservas = nullptr;
+        Anfitrion* anfitrion = nullptr;
+        unsigned char cantidadReservas = 0;
+
+        // 1. Código
+        while (lineaArchivo[i] != ',') {
+            codigo = (codigo * 10) + (lineaArchivo[i] - '0');
+            i++;
+        }
+        i+=2;
+
+        // 2. Nombre
+        while (lineaArchivo[i] != ',') {
+            nombre += lineaArchivo[i++];
+        }
+        i++;
+
+        // 3. Documento anfitrión
+        while (lineaArchivo[i] != ',') {
+            documento += lineaArchivo[i++];
+        }
+        i+=2;
+
+        // 4. Departamento
+        while (lineaArchivo[i] != ',') {
+            departamento += lineaArchivo[i++];
+        }
+        i+=2;
+
+        // 5. Municipio
+        while (lineaArchivo[i] != ',') {
+            municipio += lineaArchivo[i++];
+        }
+        i+=2;
+
+        // 6. Tipo
+        tipo = lineaArchivo[i] - '0';
+        i+=3;
+        // 7. Dirección
+        while (lineaArchivo[i] != ',') {
+            direccion += lineaArchivo[i++];
+        }
+        i+=2;
+        // 8. Precio
+        while (lineaArchivo[i] != ',') {
+            precio = (precio * 10) + (lineaArchivo[i++] - '0');
+        }
+        i++;
+
+        // 9. Amenidades
+        for (int a = 0; a < 5; a++) {
+            amenidades[a] = lineaArchivo[i++] - '0';
+            if (lineaArchivo[i] == ' ') i++;
+        }
+        i++;
+
+        // 10. Reservas (solo contamos cantidad)
+        while (i < lineaArchivo.size()) {
+            if (lineaArchivo[i] == '-') cantidadReservas++;
+            i++;
+        }
+
+        reservas = new Reserva*[cantidadReservas];
+        for (int a = 0; a < cantidadReservas; ++a){
+            reservas[a] = nullptr;}
+        // Crear el alojamiento
+        alojamientos[cantidad++] = new Alojamiento(
+            nombre, codigo, anfitrion,
+            departamento, municipio, tipo,
+            direccion, precio, amenidades, reservas, cantidadReservas);
+    }
+
+    archivo.close();
+    return alojamientos;
+}
