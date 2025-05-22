@@ -8,6 +8,8 @@ using namespace std;
 bool esValida(unsigned char d, unsigned char m, unsigned short a);
 string validarAnotaciones();
 Fecha validarFecha(string id);
+bool validarMetodoDePago();
+unsigned int contarLineasArchivos(string nombreArchivo);
 
 
 #endif

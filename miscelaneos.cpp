@@ -1,5 +1,9 @@
 #include "miscelaneos.h"
+#include "huesped.h"
+#include <algorithm>
+#include <bitset>
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -45,4 +49,28 @@ Fecha validarFecha(string id){
     while(!esValida(static_cast<unsigned char>(stoi(dia)),static_cast<unsigned char>(stoi(mes)),anio));
     return Fecha(*dia.c_str(),*mes.c_str(),anio);
 }
+
+bool validarMetodoDePago(){
+    bool metodoDePago;
+    cout << "Ingrese el metodo de pago: \n (0) Para PSE \n (1) Tarjeta de credito \n";
+    cin >> metodoDePago;
+
+    return metodoDePago;
+}
+
+unsigned int contarLineasArchivos(string nombreArchivo){
+    unsigned int contadorLineas = 0;
+    ifstream archivo;
+    string linea;
+
+    archivo.open(nombreArchivo);
+
+    while(getline(archivo,linea)){
+        contadorLineas++;}
+
+    archivo.close();
+    return contadorLineas;
+}
+
+
 
