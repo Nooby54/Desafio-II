@@ -3,37 +3,39 @@
 
 #include <string>
 #include "reserva.h"
+#include "anfitrion.h"
 
-class Anfitrion;
-
+using namespace std;
 class Alojamiento
 {
 private:
-    std::string nombreAlojamiento;
+    string nombreAlojamiento;
     unsigned int codigoIdentificador;
     Anfitrion* anfitrionResponsable;
-    std::string departamento;
-    std::string municipio;
+    string departamento;
+    string municipio;
     bool tipo;
-    std::string direccion;
+    string direccion;
     unsigned int precioNoche;
     bool amenidades[5];
     Reserva** reservasVigentes;
+    unsigned char cantidadReservas;
 
 public:
-    Alojamiento(std::string nombre, unsigned int codigo, Anfitrion* anfitrion,
-                std::string depto, std::string mun, bool tipoAloj, std::string dir,
-                unsigned int precio, bool ameni[5], Reserva** reservas);
+    Alojamiento(string nombre, unsigned int codigo, Anfitrion* anfitrion,
+                string depto, string mun, bool tipoAloj, string dir,
+                unsigned int precio, bool ameni[5], Reserva** reservas, unsigned char cantidad);
 
     ~Alojamiento();
 
-    std::string getNombreAlojamiento() const;
+    string getNombreAlojamiento() const;
     unsigned int getCodigoIdentificador() const;
     Anfitrion* getAnfitrionRespon() const;
-    std::string getDepartamento() const;
-    std::string getMunicipio() const;
+    void setAnfitrionResponsable(Anfitrion* anfitrion);
+    string getDepartamento() const;
+    string getMunicipio() const;
     bool getTipo() const;
-    std::string getDireccion() const;
+    string getDireccion() const;
     unsigned int getPrecioNoche() const;
     bool* getAmenidades();
     Reserva** getReservasVigentes() const;

@@ -130,11 +130,12 @@ Alojamiento** cargarAlojamientos(string nombreArchivo, unsigned int &cantidad) {
         while (lineaArchivo[i] != ',') {
             precio = (precio * 10) + (lineaArchivo[i++] - '0');
         }
-        i++;
+        i+=2;
 
         // 9. Amenidades
         for (int a = 0; a < 5; a++) {
-            amenidades[a] = lineaArchivo[i++] - '0';
+            //cout << nombre << (lineaArchivo[i++] - '0');
+            amenidades[a] = (lineaArchivo[i++] - '0');
             if (lineaArchivo[i] == ' ') i++;
         }
         i++;
@@ -148,6 +149,7 @@ Alojamiento** cargarAlojamientos(string nombreArchivo, unsigned int &cantidad) {
         reservas = new Reserva*[cantidadReservas];
         for (int a = 0; a < cantidadReservas; ++a){
             reservas[a] = nullptr;}
+
         // Crear el alojamiento
         alojamientos[cantidad++] = new Alojamiento(
             nombre, codigo, anfitrion,
@@ -157,4 +159,88 @@ Alojamiento** cargarAlojamientos(string nombreArchivo, unsigned int &cantidad) {
 
     archivo.close();
     return alojamientos;
+}
+
+Alojamiento* buscarAlojamientoPorCodigo(Alojamiento** alojamientos, unsigned int cantidad, unsigned int codigoBuscado) {
+    int izquierda = 0, derecha = cantidad - 1;
+
+    while (izquierda <= derecha) {
+        int medio = (izquierda + derecha) / 2;
+        unsigned int codigoActual = alojamientos[medio]->getCodigoIdentificador();
+
+        if (codigoActual == codigoBuscado)
+            return alojamientos[medio];
+        else if (codigoBuscado < codigoActual)
+            derecha = medio - 1;
+        else
+            izquierda = medio + 1;
+    }
+    return nullptr; // no encontrado
+}
+
+
+Anfitrion** cargarAnfitriones(string nombreArchivo, unsigned int &cantidad, Alojamiento** alojamientosTotales, unsigned int cantidadAlojamientosTotales){
+    unsigned int lineas = contarLineasArchivos(nombreArchivo), codigo;
+    Anfitrion** anfitriones = new Anfitrion*[lineas];
+    ifstream archivo(nombreArchivo);
+    string lineaArchivo;
+    cantidad = 0;
+
+    while (getline(archivo, lineaArchivo)) {
+        unsigned char documentoAnfitrion[11];
+        float puntuacion = 0.0;
+        unsigned char antiguedadMeses = 0, cantidadAlojamientos = 0;
+        unsigned int i = 0, prei = 0;
+        while(lineaArchivo[i] != ','){
+            documentoAnfitrion[i++] = lineaArchivo[i];
+        }
+        i+=2;
+
+        string temPun = "";
+        while(lineaArchivo[i] != ','){
+            temPun += lineaArchivo[i++];
+        }
+        puntuacion = stof(temPun);
+        i+=2;
+
+        while(lineaArchivo[i] != ','){
+            antiguedadMeses = (antiguedadMeses * 10) + (lineaArchivo[i++] - '0');
+        }
+        i++;
+
+        prei = i;
+        while (i < lineaArchivo.size()) {
+            if (lineaArchivo[i] == '-') cantidadAlojamientos++;
+            i++;
+        }
+
+
+        codigo = 0;
+        Alojamiento** alojamientos = new Alojamiento*[cantidadAlojamientos];
+        unsigned int idx = 0;
+
+        while (prei < lineaArchivo.size()) {
+            prei++;
+            if (lineaArchivo[prei] >= '0' && lineaArchivo[prei] <= '9') {
+                codigo = (codigo * 10) + (lineaArchivo[prei] - '0');
+            }
+            else if (lineaArchivo[prei] == '-' || prei == lineaArchivo.size()) {
+                // Buscar en el arreglo
+                Alojamiento* alojamientoEncontrado = buscarAlojamientoPorCodigo(alojamientosTotales, cantidadAlojamientosTotales, codigo);
+                alojamientos[idx++] = alojamientoEncontrado;
+                codigo = 0;
+            }
+        }
+
+
+        // Crear el alojamiento
+        anfitriones[cantidad] = new Anfitrion(documentoAnfitrion, puntuacion, antiguedadMeses, cantidadAlojamientos, alojamientos);
+
+        for(unsigned int i = 0; i < cantidadAlojamientos; i++){
+            alojamientos[i]->setAnfitrionResponsable((anfitriones[cantidad]));
+        }
+        cantidad++;
+    }
+    archivo.close();
+    return anfitriones;
 }

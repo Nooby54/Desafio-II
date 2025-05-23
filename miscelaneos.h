@@ -12,6 +12,7 @@ Fecha validarFecha(string id);
 bool validarMetodoDePago();
 unsigned int contarLineasArchivos(string nombreArchivo);
 Alojamiento** cargarAlojamientos(string nombreArchivo, unsigned int & cantidad);
+Anfitrion** cargarAnfitriones(string nombreArchivo, unsigned int &cantidad, Alojamiento** todosLosAlojamientos, unsigned int cantidadTotalAlojamientos);
 
 
 #endif
