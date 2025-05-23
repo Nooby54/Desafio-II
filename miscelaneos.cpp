@@ -134,7 +134,6 @@ Alojamiento** cargarAlojamientos(string nombreArchivo, unsigned int &cantidad) {
 
         // 9. Amenidades
         for (int a = 0; a < 5; a++) {
-            //cout << nombre << (lineaArchivo[i++] - '0');
             amenidades[a] = (lineaArchivo[i++] - '0');
             if (lineaArchivo[i] == ' ') i++;
         }
