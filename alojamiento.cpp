@@ -24,3 +24,4 @@ string Alojamiento::getDireccion() const { return direccion; }
 unsigned int Alojamiento::getPrecioNoche() const { return precioNoche; }
 bool* Alojamiento::getAmenidades() { return amenidades; }
 Reserva** Alojamiento::getReservasVigentes() const { return reservasVigentes; }
+unsigned char Alojamiento::getCantidadReservas() const { return cantidadReservas;}

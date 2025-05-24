@@ -4,6 +4,9 @@
 #include "fecha.h"
 #include <string>
 using namespace std;
+
+class Huesped;
+class Alojamiento;
 class Reserva
 {
 private:
@@ -12,8 +15,8 @@ private:
     Fecha fechaSalida;
     Fecha fechaPago;
     unsigned int monto;
-    unsigned char *documentoHuesped;
-    unsigned int *codigoAlojamiento;
+    Huesped* huespedReserva;
+    Alojamiento* alojamientoReserva;
     unsigned int codigoReserva;
     unsigned char duracion;
     bool metodoDePago;
@@ -24,8 +27,8 @@ public:
             Fecha &fSalida,
             Fecha &fPago,
             unsigned int m,
-            unsigned char *dHuesped,
-            unsigned int *cAlojamiento,
+            Huesped* hReserva,
+            Alojamiento* aReserva,
             unsigned int cReserva,
             unsigned char d,
             bool mPago);
@@ -35,8 +38,8 @@ public:
     Fecha getFechaSalida() const;
     Fecha getFechaPago() const;
     unsigned int getMonto() const;
-    unsigned char *getDocumentoHuesped() const;
-    unsigned int *getCodigoAlojamiento() const;
+    Huesped *getHuesped() const;
+    Alojamiento *getAlojamientoReserva() const;
     unsigned int getCodigoReserva() const;
     unsigned char getDuracion() const;
     bool getMetodoPago() const;

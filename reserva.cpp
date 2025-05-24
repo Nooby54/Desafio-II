@@ -6,12 +6,12 @@ Reserva::Reserva(string notas,
                  Fecha &fSalida,
                  Fecha &fPago,
                  unsigned int m,
-                 unsigned char *dHuesped,
-                 unsigned int *cAlojamiento,
+                 Huesped *dHuesped,
+                 Alojamiento *aReserva,
                  unsigned int cReserva,
                  unsigned char d,
                  bool mPago) : anotaciones(notas), fechaEntrada(fEntrada), fechaSalida(fSalida), fechaPago(fPago),
-                               monto(m), documentoHuesped(dHuesped), codigoAlojamiento(cAlojamiento),
+                               monto(m), huespedReserva(dHuesped), alojamientoReserva(aReserva),
                                codigoReserva(cReserva), duracion(d), metodoDePago(mPago) {}
 
 string Reserva::getAnotaciones() const
@@ -39,14 +39,11 @@ unsigned int Reserva::getMonto() const
     return monto;
 }
 
-unsigned char *Reserva::getDocumentoHuesped() const
-{
-    return documentoHuesped;
+Huesped *Reserva::getHuesped() const{
+    return huespedReserva;
 }
-
-unsigned int *Reserva::getCodigoAlojamiento() const
-{
-    return codigoAlojamiento;
+Alojamiento *Reserva::getAlojamientoReserva() const{
+    return alojamientoReserva;
 }
 
 unsigned int Reserva::getCodigoReserva() const

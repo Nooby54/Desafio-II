@@ -39,6 +39,7 @@ public:
     unsigned int getPrecioNoche() const;
     bool* getAmenidades();
     Reserva** getReservasVigentes() const;
+    unsigned char getCantidadReservas() const;
 };
 
 #endif // ALOJAMIENTO_H

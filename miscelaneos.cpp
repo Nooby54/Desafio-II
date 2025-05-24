@@ -87,59 +87,51 @@ Alojamiento** cargarAlojamientos(string nombreArchivo, unsigned int &cantidad) {
         Anfitrion* anfitrion = nullptr;
         unsigned char cantidadReservas = 0;
 
-        // 1. Código
         while (lineaArchivo[i] != ',') {
             codigo = (codigo * 10) + (lineaArchivo[i] - '0');
             i++;
         }
         i+=2;
 
-        // 2. Nombre
         while (lineaArchivo[i] != ',') {
             nombre += lineaArchivo[i++];
         }
         i++;
 
-        // 3. Documento anfitrión
         while (lineaArchivo[i] != ',') {
             documento += lineaArchivo[i++];
         }
         i+=2;
 
-        // 4. Departamento
         while (lineaArchivo[i] != ',') {
             departamento += lineaArchivo[i++];
         }
         i+=2;
 
-        // 5. Municipio
         while (lineaArchivo[i] != ',') {
             municipio += lineaArchivo[i++];
         }
         i+=2;
 
-        // 6. Tipo
         tipo = lineaArchivo[i] - '0';
         i+=3;
-        // 7. Dirección
+
         while (lineaArchivo[i] != ',') {
             direccion += lineaArchivo[i++];
         }
         i+=2;
-        // 8. Precio
+
         while (lineaArchivo[i] != ',') {
             precio = (precio * 10) + (lineaArchivo[i++] - '0');
         }
         i+=2;
 
-        // 9. Amenidades
         for (int a = 0; a < 5; a++) {
             amenidades[a] = (lineaArchivo[i++] - '0');
             if (lineaArchivo[i] == ' ') i++;
         }
         i++;
 
-        // 10. Reservas (solo contamos cantidad)
         while (i < lineaArchivo.size()) {
             if (lineaArchivo[i] == '-') cantidadReservas++;
             i++;
@@ -149,7 +141,6 @@ Alojamiento** cargarAlojamientos(string nombreArchivo, unsigned int &cantidad) {
         for (int a = 0; a < cantidadReservas; ++a){
             reservas[a] = nullptr;}
 
-        // Crear el alojamiento
         alojamientos[cantidad++] = new Alojamiento(
             nombre, codigo, anfitrion,
             departamento, municipio, tipo,
@@ -160,23 +151,22 @@ Alojamiento** cargarAlojamientos(string nombreArchivo, unsigned int &cantidad) {
     return alojamientos;
 }
 
-Alojamiento* buscarAlojamientoPorCodigo(Alojamiento** alojamientos, unsigned int cantidad, unsigned int codigoBuscado) {
+template< class T > T* buscarPorCodigo(T** datos, unsigned int cantidad, unsigned int codigoBuscado ) {
     int izquierda = 0, derecha = cantidad - 1;
 
     while (izquierda <= derecha) {
         int medio = (izquierda + derecha) / 2;
-        unsigned int codigoActual = alojamientos[medio]->getCodigoIdentificador();
+        unsigned int codigoActual = datos[medio]->getCodigoIdentificador();
 
         if (codigoActual == codigoBuscado)
-            return alojamientos[medio];
+            return datos[medio];
         else if (codigoBuscado < codigoActual)
             derecha = medio - 1;
         else
             izquierda = medio + 1;
     }
-    return nullptr; // no encontrado
+    return nullptr;
 }
-
 
 Anfitrion** cargarAnfitriones(string nombreArchivo, unsigned int &cantidad, Alojamiento** alojamientosTotales, unsigned int cantidadAlojamientosTotales){
     unsigned int lineas = contarLineasArchivos(nombreArchivo), codigo;
@@ -225,7 +215,7 @@ Anfitrion** cargarAnfitriones(string nombreArchivo, unsigned int &cantidad, Aloj
             }
             else if (lineaArchivo[prei] == '-' || prei == lineaArchivo.size()) {
                 // Buscar en el arreglo
-                Alojamiento* alojamientoEncontrado = buscarAlojamientoPorCodigo(alojamientosTotales, cantidadAlojamientosTotales, codigo);
+                Alojamiento* alojamientoEncontrado = buscarPorCodigo<Alojamiento>(alojamientosTotales, cantidadAlojamientosTotales, codigo);
                 alojamientos[idx++] = alojamientoEncontrado;
                 codigo = 0;
             }
@@ -242,4 +232,136 @@ Anfitrion** cargarAnfitriones(string nombreArchivo, unsigned int &cantidad, Aloj
     }
     archivo.close();
     return anfitriones;
+}
+
+Reserva*** cargarReserva(string nombreArchivo, unsigned int &cantidad, unsigned int &bloques, unsigned int &fila, unsigned int &columna, unsigned int& cCodigo, Alojamiento** alojamientosTotales, unsigned int cantidadAlojamientosTotales) {
+    unsigned int lineas = contarLineasArchivos(nombreArchivo) - 1;
+    bloques = (lineas / 10 > 8) ? (lineas / 10) : 8;
+
+    Reserva*** reservas = new Reserva**[bloques * 2];
+    for (unsigned int i = 0; i < bloques * 2; ++i) {
+        reservas[i] = new Reserva*[bloques];
+        for (unsigned int j = 0; j < bloques; ++j) {
+            reservas[i][j] = nullptr;
+        }
+    }
+
+    ifstream archivo(nombreArchivo);
+    string lineaArchivo;
+    cantidad = 0;
+    unsigned int i = 0;
+    getline(archivo, lineaArchivo);
+    while( lineaArchivo[i] != '-')
+        cCodigo = (cCodigo*10) + (lineaArchivo[i++] - '0');
+    while (getline(archivo, lineaArchivo)) {
+        string anotaciones;
+        unsigned char dia = 0, mes = 0, duracion = 0;
+        unsigned short anio = 0;
+        unsigned int monto = 0, codigoReserva = 0, codigoAlojamiento = 0;
+        bool metodoDePago;
+        Alojamiento* alojamientoReserva = nullptr;
+        Huesped* huespedReserva = nullptr; // se asignará después
+
+        i = 0;
+        while(lineaArchivo[i] != ','){
+            codigoReserva = (codigoReserva * 10) + (lineaArchivo[i++] - '0');
+        }
+        i+=2;
+
+        while(lineaArchivo[i] != ','){
+            codigoAlojamiento = (codigoAlojamiento * 10) + (lineaArchivo[i++] - '0');
+        }
+        alojamientoReserva = buscarPorCodigo<Alojamiento>(alojamientosTotales, cantidadAlojamientosTotales, codigoAlojamiento);
+
+        i+=2;
+
+        while(lineaArchivo[i] != '-'){
+            dia = (dia*10) + (lineaArchivo[i++]-'0');
+        }
+        i++;
+        while(lineaArchivo[i] != '-'){
+            mes = (mes*10) + (lineaArchivo[i++]-'0');
+        }
+        i++;
+        while(lineaArchivo[i] != ','){
+            anio = (anio*10)+(lineaArchivo[i++]-'0');
+        }
+        i+=2;
+
+        Fecha fechaEntrada(dia,mes,anio);
+        dia = 0;
+        mes = 0;
+        anio = 0;
+
+        while(lineaArchivo[i] != ','){
+            duracion = (duracion*10) + (lineaArchivo[i++] - '0');
+        }
+
+        i+=2;
+
+        while(lineaArchivo[i] != '-'){
+            dia = (dia*10) + (lineaArchivo[i++]-'0');
+        }
+        i++;
+        while(lineaArchivo[i] != '-'){
+            mes = (mes*10) + (lineaArchivo[i++]-'0');
+        }
+        i++;
+        while(lineaArchivo[i] != ','){
+            anio = (anio*10)+(lineaArchivo[i++]-'0');
+        }
+        i+=14;
+
+        Fecha fechaSalida(dia,mes,anio);
+        dia = 0;
+        mes = 0;
+        anio = 0;
+        metodoDePago = (lineaArchivo[i] - '0');
+        i+=3;
+        while(lineaArchivo[i] != '-'){
+            dia = (dia*10) + (lineaArchivo[i++]-'0');
+        }
+        i++;
+        while(lineaArchivo[i] != '-'){
+            mes = (mes*10) + (lineaArchivo[i++]-'0');
+        }
+        i++;
+        while(lineaArchivo[i] != ','){
+            anio = (anio*10)+(lineaArchivo[i++]-'0');
+        }
+        Fecha fechaPago(dia,mes,anio);
+        i+=2;
+        while(lineaArchivo[i] != ','){
+            monto = (monto*10) + (lineaArchivo[i++] - '0');
+        }
+        i+=2;
+        while (i < lineaArchivo.size()) {
+            anotaciones+= lineaArchivo[i++];
+        }
+
+        // Calcular fila y columna
+        fila = cantidad / bloques;
+        columna = cantidad % bloques;
+
+        reservas[fila][columna] = new Reserva(anotaciones, fechaEntrada, fechaSalida, fechaPago, monto,
+                                              huespedReserva, alojamientoReserva,
+                                              codigoReserva, duracion, metodoDePago);
+
+        for(int b = 0; b < alojamientoReserva->getCantidadReservas(); b++){
+            if((alojamientoReserva->getReservasVigentes())[b] == nullptr){
+                (alojamientoReserva->getReservasVigentes())[b] = reservas[fila][columna];
+                break;
+            }
+        }
+        cantidad++;
+        cout << "Fila: " << fila << ", Columna: " << columna << endl;
+        /*columna++;
+        if (columna == bloques) {
+            columna = 0;
+            fila++;
+        }*/
+    }
+
+    archivo.close();
+    return reservas;
 }
