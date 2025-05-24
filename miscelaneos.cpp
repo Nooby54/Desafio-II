@@ -473,3 +473,4 @@ Huesped** cargarHuesped(string nombreArchivo, unsigned int &cantidad, Reserva***
     archivo.close();
     return huespeds;
 }
+

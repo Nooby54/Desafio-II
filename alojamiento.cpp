@@ -1,4 +1,5 @@
 #include "alojamiento.h"
+#include "miscelaneos.h"
 
 Alojamiento::Alojamiento(string nombre, unsigned int codigo, Anfitrion* anfitrion,
             string depto, string mun, bool tipoAloj, string dir,
@@ -24,4 +25,8 @@ string Alojamiento::getDireccion() const { return direccion; }
 unsigned int Alojamiento::getPrecioNoche() const { return precioNoche; }
 bool* Alojamiento::getAmenidades() { return amenidades; }
 Reserva** Alojamiento::getReservasVigentes() const { return reservasVigentes; }
+void Alojamiento::redimensionarReservas() {
+    redimensionarArreglo<Reserva>(this->reservasVigentes, this->cantidadReservas);
+    cantidadReservas*=2;
+}
 unsigned char Alojamiento::getCantidadReservas() const { return cantidadReservas;}

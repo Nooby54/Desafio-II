@@ -39,6 +39,7 @@ public:
     unsigned int getPrecioNoche() const;
     bool* getAmenidades();
     Reserva** getReservasVigentes() const;
+    void redimensionarReservas();
     unsigned char getCantidadReservas() const;
 };
 
