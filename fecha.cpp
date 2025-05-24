@@ -11,6 +11,22 @@ Fecha::Fecha(unsigned char d, unsigned char m, unsigned short int a)
 
 Fecha::~Fecha() {}
 
+
+Fecha Fecha::calcularFechaDias(const Fecha& fechaBase, unsigned short int dias) const
+{
+    Fecha nuevaFecha = fechaBase;
+
+    if (dias > 0)
+        nuevaFecha += dias;
+    else if (dias < 0)
+        nuevaFecha -= -dias;
+
+    return nuevaFecha;
+}
+
+
+
+
 unsigned char Fecha::obtenerDiasMes() const
 {
     switch (mes)
