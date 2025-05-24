@@ -4,9 +4,7 @@
 #include <iostream>
 #include <fstream>
 
-
 using namespace std;
-
 
 bool esValida(unsigned char d, unsigned char m, unsigned short int a)
 {
@@ -78,7 +76,7 @@ Alojamiento** cargarAlojamientos(string nombreArchivo, unsigned int &cantidad) {
 
     ifstream archivo(nombreArchivo);
     string lineaArchivo;
-
+    getline(archivo, lineaArchivo);
     while (getline(archivo, lineaArchivo)) {
         unsigned int codigo = 0, precio = 0, i = 0;
         string nombre = "", documento = "", departamento = "", municipio = "", direccion = "";
@@ -347,21 +345,131 @@ Reserva*** cargarReserva(string nombreArchivo, unsigned int &cantidad, unsigned 
                                               huespedReserva, alojamientoReserva,
                                               codigoReserva, duracion, metodoDePago);
 
-        for(int b = 0; b < alojamientoReserva->getCantidadReservas(); b++){
+        for(unsigned char b = 0; b < alojamientoReserva->getCantidadReservas(); b++){
             if((alojamientoReserva->getReservasVigentes())[b] == nullptr){
                 (alojamientoReserva->getReservasVigentes())[b] = reservas[fila][columna];
                 break;
             }
         }
         cantidad++;
-        cout << "Fila: " << fila << ", Columna: " << columna << endl;
-        /*columna++;
-        if (columna == bloques) {
-            columna = 0;
-            fila++;
-        }*/
     }
 
     archivo.close();
     return reservas;
+}
+
+Reserva* buscarReservaPorCodigo(Reserva*** reservas, unsigned int filas, unsigned int columnas, unsigned int codigoBuscado) {
+    for (unsigned int i = 0; i < filas; ++i) {
+        if (reservas[i] == nullptr || reservas[i][0] == nullptr || reservas[i][columnas - 1] == nullptr)
+            continue;
+
+        unsigned int codMin = reservas[i][0]->getCodigoIdentificador();
+        unsigned int codMax = reservas[i][columnas - 1]->getCodigoIdentificador();
+        if (codigoBuscado < codMin || codigoBuscado > codMax)
+            continue;
+
+        int low = 0;
+        int high = columnas - 1;
+
+        while (low <= high) {
+            int mid = (low + high) / 2;
+
+            if (!reservas[i][mid]) {
+                int left = mid - 1, right = mid + 1;
+                while (left >= low || right <= high) {
+                    if (left >= low && reservas[i][left]) {
+                        mid = left;
+                        break;
+                    }
+                    if (right <= high && reservas[i][right]) {
+                        mid = right;
+                        break;
+                    }
+                    --left; ++right;
+                }
+                if (left < low && right > high) break;
+            }
+
+            unsigned int codigoActual = reservas[i][mid]->getCodigoIdentificador();
+            if (codigoActual == codigoBuscado) {
+                return reservas[i][mid];
+            } else if (codigoBuscado < codigoActual) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+    }
+
+    return nullptr;
+}
+
+Huesped** cargarHuesped(string nombreArchivo, unsigned int &cantidad, Reserva*** reservasTotales, unsigned int filas, unsigned int bloques){
+    unsigned int lineas = contarLineasArchivos(nombreArchivo), codigo;
+    Huesped** huespeds= new Huesped*[lineas];
+    ifstream archivo(nombreArchivo);
+    string lineaArchivo;
+    cantidad = 0;
+
+    while (getline(archivo, lineaArchivo)) {
+        unsigned char documentoHuesped[11];
+        float puntuacion = 0.0;
+        unsigned char antiguedadMeses = 0, cantidadReservas = 0;
+        unsigned int i = 0, prei = 0;
+        while(lineaArchivo[i] != ','){
+            documentoHuesped[i++] = lineaArchivo[i];
+        }
+        i+=2;
+
+        string temPun = "";
+        while(lineaArchivo[i] != ','){
+            temPun += lineaArchivo[i++];
+        }
+        puntuacion = stof(temPun);
+        i+=2;
+
+        while(lineaArchivo[i] != ','){
+            antiguedadMeses = (antiguedadMeses * 10) + (lineaArchivo[i++] - '0');
+        }
+        i++;
+
+        prei = i;
+        while (i < lineaArchivo.size()) {
+            if (lineaArchivo[i] == '-') cantidadReservas++;
+            i++;
+        }
+
+
+        codigo = 0;
+        Reserva** reservas = new Reserva*[cantidadReservas];
+        unsigned int idx = 0;
+
+        while (prei < lineaArchivo.size()) {
+            prei++;
+            if (lineaArchivo[prei] >= '0' && lineaArchivo[prei] <= '9') {
+                codigo = (codigo * 10) + (lineaArchivo[prei] - '0');
+            }
+            else if (lineaArchivo[prei] == '-' || prei == lineaArchivo.size()) {
+                // Buscar en el arreglo
+                Reserva* reservaEncontrada = buscarReservaPorCodigo(reservasTotales, filas, bloques, codigo);
+                reservas[idx++] = reservaEncontrada;
+                codigo = 0;
+            }
+        }
+
+
+        // Crear el alojamiento
+
+        huespeds[cantidad] = new Huesped(documentoHuesped, puntuacion, antiguedadMeses, cantidadReservas, reservas);
+
+        for (unsigned int j = 0; j < cantidadReservas; j++) {
+            if (reservas[j]) {
+                reservas[j]->setHuesped(huespeds[cantidad]);
+            }
+        }
+
+        cantidad++;
+    }
+    archivo.close();
+    return huespeds;
 }

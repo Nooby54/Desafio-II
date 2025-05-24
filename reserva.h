@@ -39,8 +39,9 @@ public:
     Fecha getFechaPago() const;
     unsigned int getMonto() const;
     Huesped *getHuesped() const;
+    void setHuesped(Huesped* huesped);
     Alojamiento *getAlojamientoReserva() const;
-    unsigned int getCodigoReserva() const;
+    unsigned int getCodigoIdentificador() const;
     unsigned char getDuracion() const;
     bool getMetodoPago() const;
 

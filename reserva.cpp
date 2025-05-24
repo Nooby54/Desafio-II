@@ -42,11 +42,16 @@ unsigned int Reserva::getMonto() const
 Huesped *Reserva::getHuesped() const{
     return huespedReserva;
 }
+
+void Reserva::setHuesped(Huesped* huesped){
+    huespedReserva = huesped;
+}
+
 Alojamiento *Reserva::getAlojamientoReserva() const{
     return alojamientoReserva;
 }
 
-unsigned int Reserva::getCodigoReserva() const
+unsigned int Reserva::getCodigoIdentificador() const
 {
     return codigoReserva;
 }

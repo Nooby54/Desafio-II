@@ -8,15 +8,17 @@ private:
     unsigned char documentoHuesped[11];
     float puntuacion;
     unsigned char antiguedadMeses;
+    unsigned char cantidadReservas;
     Reserva** reservas;
 
 public:
-    Huesped(unsigned char (&documentoHuesped)[11], float p, unsigned char aM, Reserva **rH);
+    Huesped(unsigned char (&documentoHuesped)[11], float p, unsigned char aM, unsigned char cReservas, Reserva **rH);
     Reserva** getReservas();
     void setReservas(Reserva** &nreservas);
     unsigned char* getDocumento();
     float getPuntuacion();
     unsigned char getAntiguedadMeses();
+    unsigned char getCantidadReservas();
 };
 
 #endif // HUESPED_H
