@@ -5,7 +5,7 @@ Huesped::Huesped(unsigned char (&dH)[11], float p, unsigned char aM, unsigned ch
     memcpy(documentoHuesped,dH,11);
 }
 
-Reserva **Huesped::getReservas(){
+Reserva **Huesped::getReservas() const{
     return reservas;
 }
 void Huesped::setReservas(Reserva** &nReservas){
@@ -22,6 +22,6 @@ unsigned char Huesped::getAntiguedadMeses(){
     return antiguedadMeses;
 }
 
-unsigned char Huesped::getCantidadReservas(){
+unsigned char Huesped::getCantidadReservas() const{
     return cantidadReservas;
 }

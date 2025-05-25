@@ -76,7 +76,6 @@ Alojamiento** cargarAlojamientos(string nombreArchivo, unsigned int &cantidad) {
 
     ifstream archivo(nombreArchivo);
     string lineaArchivo;
-    getline(archivo, lineaArchivo);
     while (getline(archivo, lineaArchivo)) {
         unsigned int codigo = 0, precio = 0, i = 0;
         string nombre = "", documento = "", departamento = "", municipio = "", direccion = "";
@@ -410,7 +409,6 @@ Huesped** cargarHuesped(string nombreArchivo, unsigned int &cantidad, Reserva***
     ifstream archivo(nombreArchivo);
     string lineaArchivo;
     cantidad = 0;
-
     while (getline(archivo, lineaArchivo)) {
         unsigned char documentoHuesped[11];
         float puntuacion = 0.0;
@@ -473,4 +471,3 @@ Huesped** cargarHuesped(string nombreArchivo, unsigned int &cantidad, Reserva***
     archivo.close();
     return huespeds;
 }
-

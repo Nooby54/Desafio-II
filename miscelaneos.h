@@ -19,16 +19,14 @@ Anfitrion** cargarAnfitriones(string nombreArchivo, unsigned int &cantidad, Aloj
 Reserva*** cargarReserva(string nombreArchivo, unsigned int &cantidad, unsigned int &bloques, unsigned int &fila, unsigned int &columna, unsigned int& cCodigo, Alojamiento** alojamientosTotales, unsigned int cantidadAlojamientosTotales);
 Reserva* buscarReservaPorCodigo(Reserva*** reservas, unsigned int filas, unsigned int columnas, unsigned int codigoBuscado);
 Huesped** cargarHuesped(string nombreArchivo, unsigned int &cantidad, Reserva*** reservasTotales, unsigned int filas, unsigned int bloques);
+//bool interseccionFechas(const Alojamiento*& alojamiento, const Huesped*& huesped, Fecha fechaInicio, unsigned char duracion);
 template<typename T>
-void redimensionarArreglo(T**& arreglo, unsigned int cantidadActual) {
-    T** nuevoArreglo = new T*[cantidadActual*2];
+void redimensionarArreglo(T**& arreglo, unsigned int cantidad) {
+    T** nuevoArreglo = new T*[cantidad*2];
+    memcpy(nuevoArreglo, arreglo, cantidad);
 
-    for (unsigned int i = 0; i < cantidadActual; ++i) {
-        nuevoArreglo[i] = arreglo[i];
-    }
-
-    for (unsigned int i = cantidadActual; i < cantidadActual*2; ++i) {
-        nuevoArreglo[i] = nullptr; // útil si trabajas con punteros
+    for (unsigned int i = cantidad; i < cantidad*2; ++i) {
+        nuevoArreglo[i] = nullptr;
     }
 
     delete[] arreglo;

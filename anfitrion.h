@@ -1,6 +1,7 @@
 #ifndef ANFITRION_H
 #define ANFITRION_H
 
+#include "fecha.h"
 class Alojamiento;
 
 class Anfitrion
@@ -21,6 +22,7 @@ public:
     unsigned char getCantidadAlojamientos() const;
     Alojamiento** getAlojamientos() const;
     void setAlojamientos(Alojamiento** nuevosAlojamientos);
+    void consultarReservas(Fecha fechaInicio, Fecha fechaFin);
 };
 
 #endif // ANFITRION_H
