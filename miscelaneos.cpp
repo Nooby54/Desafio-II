@@ -459,7 +459,7 @@ bool interseccionFechas(Alojamiento* alojamiento, Huesped* huesped, Fecha fechaI
 }
 
 void actualizarHistorico(Reserva*** reservas, Fecha fecha, string nombreArchivo, unsigned int &cantidad, unsigned int filas, unsigned int columnas) {
-    ofstream archivo(nombreArchivo);
+    ofstream archivo(nombreArchivo, ios::app);
 
     unsigned int k = 0;
 
@@ -482,11 +482,11 @@ void actualizarHistorico(Reserva*** reservas, Fecha fecha, string nombreArchivo,
                     if (k < filas * columnas) {
                         unsigned int filaNueva = k / columnas;
                         unsigned int columnaNueva = k % columnas;
-
+                        if(i != filaNueva || j != columnaNueva){
                         reservas[filaNueva][columnaNueva] = reservas[i][j];
-                        reservas[i][j] = nullptr;
-                        k++;
-                    }
+                            reservas[i][j] = nullptr;}
+                        k++;}
+
                 }
             }
         }
