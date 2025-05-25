@@ -370,53 +370,7 @@ Reserva* buscarReservaPorCodigo(Reserva*** reservas, unsigned int filas, unsigne
     }
     return nullptr;
 }
-/*
-Reserva* buscarReservaPorCodigo(Reserva*** reservas, unsigned int filas, unsigned int columnas, unsigned int codigoBuscado) {
-    for (unsigned int i = 0; i < filas; ++i) {
-        if (reservas[i] == nullptr || reservas[i][0] == nullptr || reservas[i][columnas - 1] == nullptr)
-            continue;
 
-        unsigned int codMin = reservas[i][0]->getCodigoIdentificador();
-        unsigned int codMax = reservas[i][columnas - 1]->getCodigoIdentificador();
-        if (codigoBuscado < codMin || codigoBuscado > codMax)
-            continue;
-
-        int low = 0;
-        int high = columnas - 1;
-
-        while (low <= high) {
-            int mid = (low + high) / 2;
-
-            if (!reservas[i][mid]) {
-                int left = mid - 1, right = mid + 1;
-                while (left >= low || right <= high) {
-                    if (left >= low && reservas[i][left]) {
-                        mid = left;
-                        break;
-                    }
-                    if (right <= high && reservas[i][right]) {
-                        mid = right;
-                        break;
-                    }
-                    --left; ++right;
-                }
-                if (left < low && right > high) break;
-            }
-
-            unsigned int codigoActual = reservas[i][mid]->getCodigoIdentificador();
-            if (codigoActual == codigoBuscado) {
-                return reservas[i][mid];
-            } else if (codigoBuscado < codigoActual) {
-                high = mid - 1;
-            } else {
-                low = mid + 1;
-            }
-        }
-    }
-
-    return nullptr;
-}
-*/
 Huesped** cargarHuesped(string nombreArchivo, unsigned int &cantidad, Reserva*** reservasTotales, unsigned int filas, unsigned int bloques){
     unsigned int lineas = contarLineasArchivos(nombreArchivo), codigo;
     Huesped** huespeds= new Huesped*[lineas];
