@@ -17,6 +17,7 @@ public:
     Fecha(unsigned char d, unsigned char m, unsigned short int a);
     ~Fecha();
 
+    Fecha calcularFechaDias(const Fecha& fechaBase, unsigned short int dias);
     std::string obtenerDiaSemana() const;
     std::string imprimirFecha() const;
 
