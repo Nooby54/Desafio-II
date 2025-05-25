@@ -501,3 +501,170 @@ void actualizarHistorico(Reserva*** reservas, Fecha fecha, string nombreArchivo,
 
     archivo.close();
 }
+
+
+
+void guardarAlojamientos(Alojamiento** alojamientos, int cantidad)
+{
+    if (!alojamientos) return;
+
+    std::ofstream archivo("alojamientos.txt");
+    if (!archivo.is_open()) {
+        std::cerr << "Error: No se pudo abrir alojamientos.txt" << std::endl;
+        return;
+    }
+
+    for (int i = 0; i < cantidad; ++i)
+    {
+        Alojamiento* a = alojamientos[i];
+        if (!a) continue;
+
+        archivo << a->getCodigoIdentificador() << ", ";
+
+
+        std::string nombreAlojamiento = a->getNombreAlojamiento();
+        archivo << (!nombreAlojamiento.empty() ? nombreAlojamiento : "Sin nombre") << ", ";
+
+
+        unsigned char* doc = a->getAnfitrionRespon()->getDocumentoAnfitrion();
+        if (doc)
+        {
+            for (int j = 0; j < 10; ++j)
+                archivo << static_cast<char>(doc[j]);
+        } else {
+            archivo << "Sin documento";
+        }
+        archivo << ", ";
+
+        archivo << a->getDepartamento() << ", "
+                << a->getMunicipio() << ", "
+                << a->getTipo() << ", "
+                << a->getDireccion() << ", "
+                << a->getPrecioNoche() << ", ";
+
+
+        bool* amenidades = a->getAmenidades();
+        if (amenidades)
+        {
+            for (int j = 0; j < 5; ++j)
+            {
+                archivo << (amenidades[j] ? 1 : 0);
+                if (j < 4) archivo << " ";
+            }
+        } else
+        {
+            archivo << "Sin amenidades";
+        }
+        archivo << ", ";
+
+
+        Reserva** reservas = a->getReservasVigentes();
+        if (reservas)
+        {
+            int j = 0;
+            while (reservas[j] != nullptr)
+            {
+                archivo << reservas[j]->getCodigoIdentificador();
+                if (reservas[j + 1] != nullptr)
+                    archivo << " - ";
+                ++j;
+            }
+        } else
+        {
+            archivo << "Sin reservas";
+        }
+
+        archivo << std::endl;
+    }
+
+    archivo.close();
+}
+
+
+void guardarHuespedes(Huesped** huespedes, int cantidad) {
+    if (!huespedes) return;
+
+    std::ofstream archivo("huesped.txt");
+    if (!archivo.is_open())
+    {
+        std::cerr << "Error: No se pudo abrir huesped.txt" << std::endl;
+        return;
+    }
+
+    for (int i = 0; i < cantidad; ++i)
+    {
+        Huesped* h = huespedes[i];
+        if (!h) continue;
+
+        unsigned char* doc = h->getDocumento();
+        if (doc) {
+            for (int j = 0; j < 10 && doc[j] != '\0'; ++j)
+                archivo << static_cast<char>(doc[j]);
+        } else {
+            archivo << "Sin documento";
+        }
+        archivo << ", " << h->getPuntuacion()
+                << ", " << (int)h->getAntiguedadMeses()
+                << ", ";
+
+
+        Reserva** r = h->getReservas();
+        if (r) {
+            int j = 0;
+            while (r[j] != nullptr)
+            {
+                archivo << r[j]->getCodigoIdentificador();
+                if (r[j + 1] != nullptr)
+                    archivo << " - ";
+                ++j;
+            }
+        } else
+        {
+            archivo << "Sin reservas";
+        }
+
+        archivo << std::endl;
+    }
+
+    archivo.close();
+}
+
+
+void guardarReservas(Reserva** reservas, int cantidad) {
+    if (!reservas) return;
+
+    std::ofstream archivo("reservas.txt");
+    if (!archivo.is_open()) return;
+
+    archivo << cantidad << "-\n";
+
+    for (int i = 0; i < cantidad; ++i) {
+        Reserva* r = reservas[i];
+
+        archivo << r->getCodigoIdentificador() << ","
+                << r->getAlojamientoReserva()->getCodigoIdentificador() << ","
+                << static_cast<int>(r->getFechaEntrada().getDia()) << "-"
+                << static_cast<int>(r->getFechaEntrada().getMes()) << "-"
+                << r->getFechaEntrada().getAnio() << ","
+                << static_cast<int>(r->getDuracion()) << ","
+                << static_cast<int>(r->getFechaSalida().getDia()) << "-"
+                << static_cast<int>(r->getFechaSalida().getMes()) << "-"
+                << r->getFechaSalida().getAnio() << ","
+                << r->getHuesped()->getDocumento() << ","
+                << r->getMetodoPago() << ","
+                << static_cast<int>(r->getFechaPago().getDia()) << "-"
+                << static_cast<int>(r->getFechaPago().getMes()) << "-"
+                << r->getFechaPago().getAnio() << ","
+                << r->getMonto() << ","
+                << r->getAnotaciones() << "\n";
+    }
+
+    archivo.close();
+}
+
+
+
+
+
+
+
