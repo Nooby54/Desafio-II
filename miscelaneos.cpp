@@ -359,6 +359,20 @@ Reserva*** cargarReserva(string nombreArchivo, unsigned int &cantidad, unsigned 
 
 Reserva* buscarReservaPorCodigo(Reserva*** reservas, unsigned int filas, unsigned int columnas, unsigned int codigoBuscado) {
     for (unsigned int i = 0; i < filas; ++i) {
+        if (!reservas[i]) continue;
+
+        for (unsigned int j = 0; j < columnas; ++j) {
+            if (!reservas[i][j]) continue;
+            if (reservas[i][j]->getCodigoIdentificador() == codigoBuscado) {
+                return reservas[i][j];
+            }
+        }
+    }
+    return nullptr;
+}
+/*
+Reserva* buscarReservaPorCodigo(Reserva*** reservas, unsigned int filas, unsigned int columnas, unsigned int codigoBuscado) {
+    for (unsigned int i = 0; i < filas; ++i) {
         if (reservas[i] == nullptr || reservas[i][0] == nullptr || reservas[i][columnas - 1] == nullptr)
             continue;
 
@@ -402,13 +416,14 @@ Reserva* buscarReservaPorCodigo(Reserva*** reservas, unsigned int filas, unsigne
 
     return nullptr;
 }
-
+*/
 Huesped** cargarHuesped(string nombreArchivo, unsigned int &cantidad, Reserva*** reservasTotales, unsigned int filas, unsigned int bloques){
     unsigned int lineas = contarLineasArchivos(nombreArchivo), codigo;
     Huesped** huespeds= new Huesped*[lineas];
     ifstream archivo(nombreArchivo);
     string lineaArchivo;
     cantidad = 0;
+
     while (getline(archivo, lineaArchivo)) {
         unsigned char documentoHuesped[11];
         float puntuacion = 0.0;
@@ -447,7 +462,7 @@ Huesped** cargarHuesped(string nombreArchivo, unsigned int &cantidad, Reserva***
             if (lineaArchivo[prei] >= '0' && lineaArchivo[prei] <= '9') {
                 codigo = (codigo * 10) + (lineaArchivo[prei] - '0');
             }
-            else if (lineaArchivo[prei] == '-' || prei == lineaArchivo.size()) {
+            else if (lineaArchivo[prei] == '-' && lineaArchivo[prei] != ' ') {
                 // Buscar en el arreglo
                 Reserva* reservaEncontrada = buscarReservaPorCodigo(reservasTotales, filas, bloques, codigo);
                 reservas[idx++] = reservaEncontrada;
@@ -470,4 +485,20 @@ Huesped** cargarHuesped(string nombreArchivo, unsigned int &cantidad, Reserva***
     }
     archivo.close();
     return huespeds;
+}
+bool interseccionFechas(Alojamiento* alojamiento, Huesped* huesped, Fecha fechaInicio, Fecha fechaFin){
+    for(unsigned char r = 0; r < alojamiento->getCantidadReservas(); r++){
+        Reserva* reserva = alojamiento->getReservasVigentes()[r];
+        if((fechaInicio >= reserva->getFechaEntrada() && fechaInicio <= reserva->getFechaSalida()) || (fechaFin >= reserva->getFechaEntrada() && fechaFin <= reserva->getFechaSalida())){
+            return true;
+        }
+    }
+    for(unsigned char r = 0; r < huesped->getCantidadReservas()-1; r++){
+        Reserva* reserva = huesped->getReservas()[r];
+        if((fechaInicio >= reserva->getFechaEntrada() && fechaInicio <= reserva->getFechaSalida()) || (fechaFin >= reserva->getFechaEntrada() && fechaFin <= reserva->getFechaSalida())){
+            return true;
+        }
+    }
+
+    return false;
 }
