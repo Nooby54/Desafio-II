@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+using namespace std;
+
 
 Fecha::Fecha(const Fecha& otra) : dia(otra.dia), mes(otra.mes), anio(otra.anio) {}
 
@@ -10,6 +12,22 @@ Fecha::Fecha(unsigned char d, unsigned char m, unsigned short int a)
 
 
 Fecha::~Fecha() {}
+
+
+Fecha Fecha::calcularFechaDias(const Fecha& fechaBase, unsigned short int dias) 
+{
+    Fecha nuevaFecha = fechaBase;
+
+    if (dias > 0)
+        nuevaFecha += dias;
+    else if (dias < 0)
+        nuevaFecha -= -dias;
+
+    return nuevaFecha;
+}
+
+
+
 
 unsigned char Fecha::obtenerDiasMes() const
 {
@@ -22,7 +40,7 @@ unsigned char Fecha::obtenerDiasMes() const
 }
 
 
-std::string Fecha::obtenerDiaSemana() const
+string Fecha::obtenerDiaSemana() const
 {
     int a = anio, m = mes, d = dia;
     if (m < 3) { m += 12; a--; }
@@ -30,18 +48,18 @@ std::string Fecha::obtenerDiaSemana() const
     int j = a / 100;
     int h = (d + ((13 * (m + 1)) / 5) + k + (k / 4) + (j / 4) + (5 * j)) % 7;
 
-    std::string diasSemana[] = {"Sábado", "Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes"};
+    string diasSemana[] = {"Sabado", "Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes"};
     return diasSemana[h];
 }
 
-std::string Fecha::imprimirFecha() const
+string Fecha::imprimirFecha() const
 {
-    static std::string nombresMes[] = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+    static string nombresMes[] = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
                                        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
 
-    std::string nombreDia = obtenerDiaSemana();
+    string nombreDia = obtenerDiaSemana();
 
-    return nombreDia + ", " + std::to_string(dia) + " de " + nombresMes[mes - 1] + " del " + std::to_string(anio);
+    return nombreDia + ", " + to_string(dia) + " de " + nombresMes[mes - 1] + " del " + to_string(anio);
 }
 
 

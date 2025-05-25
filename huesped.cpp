@@ -1,11 +1,11 @@
 #include "huesped.h"
 
-Huesped::Huesped(unsigned char (&dH)[11], float p, unsigned char aM, Reserva** rH):
-    puntuacion(p), antiguedadMeses(aM), reservas(rH){
+Huesped::Huesped(unsigned char (&dH)[11], float p, unsigned char aM, unsigned char cReservas, Reserva** rH):
+    puntuacion(p), antiguedadMeses(aM), cantidadReservas(cReservas),reservas(rH){
     memcpy(documentoHuesped,dH,11);
 }
 
-Reserva **Huesped::getReservas(){
+Reserva **Huesped::getReservas() const{
     return reservas;
 }
 void Huesped::setReservas(Reserva** &nReservas){
@@ -20,4 +20,8 @@ float Huesped::getPuntuacion(){
 }
 unsigned char Huesped::getAntiguedadMeses(){
     return antiguedadMeses;
+}
+
+unsigned char Huesped::getCantidadReservas() const{
+    return cantidadReservas;
 }
