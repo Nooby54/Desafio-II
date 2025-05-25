@@ -14,7 +14,7 @@ Fecha::Fecha(unsigned char d, unsigned char m, unsigned short int a)
 Fecha::~Fecha() {}
 
 
-Fecha Fecha::calcularFechaDias(const Fecha& fechaBase, unsigned short int dias) const
+Fecha Fecha::calcularFechaDias(const Fecha& fechaBase, unsigned short int dias) 
 {
     Fecha nuevaFecha = fechaBase;
 
