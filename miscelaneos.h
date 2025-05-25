@@ -20,6 +20,7 @@ Reserva*** cargarReserva(string nombreArchivo, unsigned int &cantidad, unsigned 
 Reserva* buscarReservaPorCodigo(Reserva*** reservas, unsigned int filas, unsigned int columnas, unsigned int codigoBuscado);
 Huesped** cargarHuesped(string nombreArchivo, unsigned int &cantidad, Reserva*** reservasTotales, unsigned int filas, unsigned int bloques);
 bool interseccionFechas(Alojamiento* alojamiento, Huesped* huesped, Fecha fechaInicio, Fecha fechaFin);
+Reserva*** actualizarHistorico(Reserva*** reservas, Fecha fecha, string nombreArchivo, unsigned int &cantidad, unsigned int filas, unsigned int columnas);
 template<typename T>
 void redimensionarArreglo(T**& arreglo, unsigned int cantidad) {
     T** nuevoArreglo = new T*[cantidad*2];

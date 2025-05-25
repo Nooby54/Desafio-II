@@ -440,6 +440,7 @@ Huesped** cargarHuesped(string nombreArchivo, unsigned int &cantidad, Reserva***
     archivo.close();
     return huespeds;
 }
+
 bool interseccionFechas(Alojamiento* alojamiento, Huesped* huesped, Fecha fechaInicio, Fecha fechaFin){
     for(unsigned char r = 0; r < alojamiento->getCantidadReservas(); r++){
         Reserva* reserva = alojamiento->getReservasVigentes()[r];
@@ -456,3 +457,42 @@ bool interseccionFechas(Alojamiento* alojamiento, Huesped* huesped, Fecha fechaI
 
     return false;
 }
+
+Reserva*** actualizarHistorico(Reserva*** reservas, Fecha fecha, string nombreArchivo, unsigned int &cantidad, unsigned int filas, unsigned int columnas) {
+    ofstream archivo(nombreArchivo);
+
+    for (unsigned int i = 0; i < filas; ++i) {
+        if (!reservas[i]) continue;
+
+        unsigned int k = 0;
+
+        for (unsigned int j = 0; j < columnas; ++j) {
+            if (reservas[i][j]) {
+                if (reservas[i][j]->getFechaEntrada() < fecha) {
+                    Reserva* reTemp = reservas[i][j];
+                    archivo << reTemp->getCodigoIdentificador() << ", " << reTemp->getAlojamientoReserva()->getCodigoIdentificador() <<
+                        ", " << (int)reTemp->getFechaEntrada().getDia() << "-" << (int)reTemp->getFechaEntrada().getMes() << "-" << reTemp->getFechaEntrada().getAnio() <<
+                        ", " << (int)reTemp->getDuracion() << ", " << (int)reTemp->getFechaSalida().getDia() << "-" << (int)reTemp->getFechaSalida().getMes() << "-" << reTemp->getFechaSalida().getAnio() <<
+                        ", " << reTemp->getHuesped()->getDocumento() << ", " << reTemp->getMetodoPago() << ", " << (int)reTemp->getFechaPago().getDia() << "-" << (int)reTemp->getFechaPago().getMes() << "-" <<
+                        reTemp->getFechaPago().getAnio() << ", " << reTemp->getMonto() << ", " << reTemp->getAnotaciones() << "\n";
+                    delete reservas[i][j];
+                    reservas[i][j] = nullptr;
+                } else {
+                    if (k != j) {
+                        reservas[i][k] = reservas[i][j];
+                        reservas[i][j] = nullptr;
+                    }
+                    k++;
+                }
+            }
+        }
+
+        for (unsigned int j = k; j < columnas; ++j) {
+            reservas[i][j] = nullptr;
+        }
+    }
+
+    archivo.close();
+    return reservas;
+}
+
