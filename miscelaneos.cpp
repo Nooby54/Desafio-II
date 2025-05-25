@@ -458,13 +458,13 @@ bool interseccionFechas(Alojamiento* alojamiento, Huesped* huesped, Fecha fechaI
     return false;
 }
 
-Reserva*** actualizarHistorico(Reserva*** reservas, Fecha fecha, string nombreArchivo, unsigned int &cantidad, unsigned int filas, unsigned int columnas) {
+void actualizarHistorico(Reserva*** reservas, Fecha fecha, string nombreArchivo, unsigned int &cantidad, unsigned int filas, unsigned int columnas) {
     ofstream archivo(nombreArchivo);
+
+    unsigned int k = 0;
 
     for (unsigned int i = 0; i < filas; ++i) {
         if (!reservas[i]) continue;
-
-        unsigned int k = 0;
 
         for (unsigned int j = 0; j < columnas; ++j) {
             if (reservas[i][j]) {
@@ -477,22 +477,27 @@ Reserva*** actualizarHistorico(Reserva*** reservas, Fecha fecha, string nombreAr
                         reTemp->getFechaPago().getAnio() << ", " << reTemp->getMonto() << ", " << reTemp->getAnotaciones() << "\n";
                     delete reservas[i][j];
                     reservas[i][j] = nullptr;
+                    cantidad--;
                 } else {
-                    if (k != j) {
-                        reservas[i][k] = reservas[i][j];
+                    if (k < filas * columnas) {
+                        unsigned int filaNueva = k / columnas;
+                        unsigned int columnaNueva = k % columnas;
+
+                        reservas[filaNueva][columnaNueva] = reservas[i][j];
                         reservas[i][j] = nullptr;
+                        k++;
                     }
-                    k++;
                 }
             }
         }
+    }
 
-        for (unsigned int j = k; j < columnas; ++j) {
-            reservas[i][j] = nullptr;
-        }
+
+    for (unsigned int i = k; i < filas * columnas; ++i) {
+        unsigned int filaNueva = i / columnas;
+        unsigned int colNueva = i % columnas;
+        reservas[filaNueva][colNueva] = nullptr;
     }
 
     archivo.close();
-    return reservas;
 }
-
