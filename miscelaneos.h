@@ -21,6 +21,9 @@ Reserva* buscarReservaPorCodigo(Reserva*** reservas, unsigned int filas, unsigne
 Huesped** cargarHuesped(string nombreArchivo, unsigned int &cantidad, Reserva*** reservasTotales, unsigned int filas, unsigned int bloques);
 bool interseccionFechas(Alojamiento* alojamiento, Huesped* huesped, Fecha fechaInicio, Fecha fechaFin);
 void actualizarHistorico(Reserva*** reservas, Fecha fecha, string nombreArchivo, unsigned int &cantidad, unsigned int filas, unsigned int columnas);
+void guardarReservas(const std::string& nombreArchivo, Reserva*** reservas, unsigned int filas, unsigned int columnas, unsigned int cantidad);
+void guardarHuespedes(const std::string& nombreArchivo, Huesped** huespedes, int cantidad);
+void guardarAlojamientos(const std::string& nombreArchivo, Alojamiento** alojamientos, int cantidad);
 template<typename T>
 void redimensionarArreglo(T**& arreglo, unsigned int cantidad) {
     T** nuevoArreglo = new T*[cantidad*2];
