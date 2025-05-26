@@ -574,7 +574,7 @@ void guardarHuespedes(const std::string& nombreArchivo, Huesped** huespedes, int
         if (!h) continue;
 
         unsigned char* doc = h->getDocumento();
-        archivo << (doc ? std::string(reinterpret_cast<char*>(doc), 10) : "Sin documento") << ", ";
+        archivo << (doc ? std::string(reinterpret_cast<char*>(doc), 10)) << ", ";
         archivo << h->getPuntuacion() << ", " << static_cast<int>(h->getAntiguedadMeses()) << ", ";
 
 
@@ -584,13 +584,13 @@ void guardarHuespedes(const std::string& nombreArchivo, Huesped** huespedes, int
         if (r && cantidadReservas > 0) {
             for (int j = 0; j < cantidadReservas; ++j) {
                 archivo << r[j]->getCodigoIdentificador();
-                if (j < cantidadReservas - 1) archivo << " -";
+                if (j < cantidadReservas - 1) archivo << " - ";
             }
         } else {
-            archivo << "Sin reservas";
+            archivo << ",";
         }
 
-        archivo << "\n";
+        archivo << " -\n";
     }
 
     archivo.close();
