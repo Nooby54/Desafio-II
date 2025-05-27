@@ -15,7 +15,7 @@ Anfitrion::Anfitrion(unsigned char (&documento)[11], float p, unsigned char anti
 Anfitrion::~Anfitrion() {}
 
 
-unsigned char* Anfitrion::getDocumentoAnfitrion() { return documentoAnfitrion; }
+unsigned char* Anfitrion::getDocumento() { return documentoAnfitrion; }
 float Anfitrion::getPuntuacion() const { return puntuacion; }
 unsigned char Anfitrion::getAntiguedadMeses() const { return antiguedadMeses; }
 unsigned char Anfitrion::getCantidadAlojamientos() const {return cantidadAlojamientos;}
@@ -31,8 +31,6 @@ void Anfitrion::consultarReservas(Fecha fechaInicio, Fecha fechaFin)
         for(unsigned char r = 0; r < this->alojamientos[i]->getCantidadReservas(); r++){
             Reserva* reserva = this->alojamientos[i]->getReservasVigentes()[r];
             if(reserva->getFechaEntrada() >= fechaInicio && reserva->getFechaEntrada() <= fechaFin){
-                //cout << this->alojamientos[i]->getReservasVigentes()[r]->getCodigoIdentificador() << endl;
-
                 cout << "------------------------\n";
                 cout << "Reserva #" << reserva->getCodigoIdentificador() << "\n";
 
@@ -58,7 +56,6 @@ void Anfitrion::consultarReservas(Fecha fechaInicio, Fecha fechaFin)
                 }
 
                 // Fechas
-                //cout << "fechas" << endl;
                 cout << "  Fecha de Entrada: " << reserva->getFechaEntrada().imprimirFecha() << "\n";
                 cout << "  Fecha de Salida : " << reserva->getFechaSalida().imprimirFecha() << "\n";
                 cout << "  Fecha de Pago   : " << reserva->getFechaPago().imprimirFecha() << "\n";

@@ -24,6 +24,26 @@ void actualizarHistorico(Reserva*** reservas, Fecha fecha, string nombreArchivo,
 void guardarReservas(const std::string& nombreArchivo, Reserva*** reservas, unsigned int filas, unsigned int columnas, unsigned int cantidad);
 void guardarHuespedes(const std::string& nombreArchivo, Huesped** huespedes, int cantidad);
 void guardarAlojamientos(const std::string& nombreArchivo, Alojamiento** alojamientos, int cantidad);
+void eliminarReserva(Reserva***& reservas, unsigned int filasTotales, unsigned int columnasTotales, unsigned int &cantidadReservas);
+void reservaConFiltro(Reserva*** reservas, unsigned int filas, unsigned int columnas, float puntuacion = 0, unsigned int precio = 0);
+template <class T>
+T* buscarUsuario(T** datos, unsigned int cantidad, unsigned char documento[11]) {
+    for(unsigned int c = 0; c < cantidad; c++){
+        unsigned char* docActual = datos[c]->getDocumento();
+        bool iguales = true;
+        for (int i = 0; i < 11; ++i) {
+            if ((docActual[i]) != documento[i]) {
+                iguales = false;
+                break;
+            }
+        }
+        if (iguales)
+            return datos[c];
+    }
+
+    return nullptr;
+}
+
 template<typename T>
 void redimensionarArreglo(T**& arreglo, unsigned int cantidad) {
     T** nuevoArreglo = new T*[cantidad*2];

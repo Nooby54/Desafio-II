@@ -16,7 +16,7 @@ public:
     Anfitrion(unsigned char (&documento)[11], float p, unsigned char antiguedad, unsigned char cAl, Alojamiento** alojamientos);
     ~Anfitrion();
 
-    unsigned char* getDocumentoAnfitrion();
+    unsigned char* getDocumento();
     float getPuntuacion() const;
     unsigned char getAntiguedadMeses() const;
     unsigned char getCantidadAlojamientos() const;

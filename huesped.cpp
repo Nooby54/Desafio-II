@@ -8,9 +8,25 @@ Huesped::Huesped(unsigned char (&dH)[11], float p, unsigned char aM, unsigned ch
 Reserva **Huesped::getReservas() const{
     return reservas;
 }
+
 void Huesped::setReservas(Reserva** &nReservas){
     reservas = nReservas;
 }
+
+void Huesped::eliminarReserva(unsigned int codigoReserva){
+    unsigned char k = 0;
+    for(unsigned int i = 0; i < cantidadReservas; i++){
+        if(reservas[i]->getCodigoIdentificador() == codigoReserva){
+            reservas[i] = nullptr;
+        }
+        else{
+            reservas[k] = reservas[i];
+            k++;
+        }
+    }
+    cantidadReservas = k;
+}
+
 unsigned char* Huesped::getDocumento(){
     return documentoHuesped;
 }
@@ -18,6 +34,7 @@ unsigned char* Huesped::getDocumento(){
 float Huesped::getPuntuacion(){
     return puntuacion;
 }
+
 unsigned char Huesped::getAntiguedadMeses(){
     return antiguedadMeses;
 }

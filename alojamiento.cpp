@@ -25,6 +25,19 @@ string Alojamiento::getDireccion() const { return direccion; }
 unsigned int Alojamiento::getPrecioNoche() const { return precioNoche; }
 bool* Alojamiento::getAmenidades() { return amenidades; }
 Reserva** Alojamiento::getReservasVigentes() const { return reservasVigentes; }
+void Alojamiento::eliminarReserva(unsigned int codigoReserva){
+    unsigned char k = 0;
+    for(unsigned int i = 0; i < cantidadReservas; i++){
+        if(reservasVigentes[i]->getCodigoIdentificador() == codigoReserva){
+            reservasVigentes[i] = nullptr;
+        }
+        else{
+            reservasVigentes[k] = reservasVigentes[i];
+            k++;
+        }
+    }
+    cantidadReservas = k;
+}
 void Alojamiento::redimensionarReservas() {
     redimensionarArreglo<Reserva>(this->reservasVigentes, this->cantidadReservas);
     cantidadReservas*=2;
