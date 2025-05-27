@@ -27,11 +27,12 @@ unsigned int Alojamiento::getPrecioNoche() const { return precioNoche; }
 bool *Alojamiento::getAmenidades() { return amenidades; }
 Reserva **Alojamiento::getReservasVigentes() const { return reservasVigentes; }
 
-void Alojamiento::eliminarReserva(unsigned int codigoReserva)
+void Alojamiento::eliminarReserva(unsigned int codigoReserva, unsigned int &iteraciones)
 {
     unsigned char k = 0;
     for (unsigned int i = 0; i < cantidadReservas; i++)
     {
+        iteraciones++;
         if (reservasVigentes[i]->getCodigoIdentificador() == codigoReserva)
         {
             reservasVigentes[i] = nullptr;
@@ -45,11 +46,11 @@ void Alojamiento::eliminarReserva(unsigned int codigoReserva)
     cantidadReservas = k;
 }
 
-void Alojamiento::agregarReserva(Reserva *reserva)
+void Alojamiento::agregarReserva(Reserva *reserva, unsigned int &iteraciones)
 {
     if (this->cantidadReservas == this->tamReservas)
     {
-        redimensionarArreglo<Reserva>(this->reservasVigentes, this->tamReservas, this->tamReservas + 6);
+        redimensionarArreglo<Reserva>(this->reservasVigentes, this->tamReservas, this->tamReservas + 6,iteraciones);
         this->tamReservas += 6;
     }
     this->reservasVigentes[this->cantidadReservas] = reserva;

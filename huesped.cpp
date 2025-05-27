@@ -12,22 +12,23 @@ Reserva **Huesped::getReservas() const
     return reservas;
 }
 
-void Huesped::agregarReserva(Reserva *reserva)
+void Huesped::agregarReserva(Reserva *reserva, unsigned int &iteraciones)
 {
     if (this->cantidadReservas == this->tamReservas)
     {
-        redimensionarArreglo<Reserva>(this->reservas, this->tamReservas, this->tamReservas + 6);
+        redimensionarArreglo<Reserva>(this->reservas, this->tamReservas, this->tamReservas + 6, iteraciones);
         this->tamReservas += 6;
     }
     this->reservas[this->cantidadReservas] = reserva;
     this->cantidadReservas++;
 }
 
-void Huesped::eliminarReserva(unsigned int codigoReserva)
+void Huesped::eliminarReserva(unsigned int codigoReserva, unsigned int &iteraciones)
 {
     unsigned char k = 0;
     for (unsigned int i = 0; i < cantidadReservas; i++)
     {
+        iteraciones++;
         if (reservas[i]->getCodigoIdentificador() == codigoReserva)
         {
             reservas[i] = nullptr;

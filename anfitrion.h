@@ -22,7 +22,7 @@ public:
     unsigned char getCantidadAlojamientos() const;
     Alojamiento **getAlojamientos() const;
     void setAlojamientos(Alojamiento **nuevosAlojamientos);
-    void consultarReservas(Fecha fechaInicio, Fecha fechaFin);
+    void consultarReservas(Fecha fechaInicio, Fecha fechaFin, unsigned int &iteraciones);
 };
 
 #endif // ANFITRION_H

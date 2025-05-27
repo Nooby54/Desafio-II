@@ -9,57 +9,65 @@ using namespace std;
 
 int main()
 {
+    // Variables de tamanio e iteraciones
+    unsigned int iteraciones = 0;
+    //size_t tamanioObjetos = 0;
+
     // Cargar archivos
     unsigned int cantidadAlojamientos = 0, cantidadAnfitriones = 0, cantidadReservas = 0, cantidadHuesped = 0, columnasTotales = 0, fila = 0, columna = 0, contadorCodigoReservas = 0;
-    Alojamiento **alojamientos = cargarAlojamientos("../../data/alojamientos.txt", cantidadAlojamientos);
-    Anfitrion **anfitriones = cargarAnfitriones("../../data/anfitrion.txt", cantidadAnfitriones, alojamientos, cantidadAlojamientos);
-    Reserva ***reservas = cargarReserva("../../data/reservas.txt", cantidadReservas, columnasTotales, fila, columna, contadorCodigoReservas, alojamientos, cantidadAlojamientos);
+    Alojamiento **alojamientos = cargarAlojamientos("../../data/alojamientos.txt", cantidadAlojamientos, iteraciones);
+    Anfitrion **anfitriones = cargarAnfitriones("../../data/anfitrion.txt", cantidadAnfitriones, alojamientos, cantidadAlojamientos, iteraciones);
+    Reserva ***reservas = cargarReserva("../../data/reservas.txt", cantidadReservas, columnasTotales, fila, columna, contadorCodigoReservas, alojamientos, cantidadAlojamientos, iteraciones);
     unsigned int filasTotales = columnasTotales * 2;
-    Huesped **huespedes = cargarHuesped("../../data/huesped.txt", cantidadHuesped, reservas, filasTotales, columnasTotales);
+    Huesped **huespedes = cargarHuesped("../../data/huesped.txt", cantidadHuesped, reservas, filasTotales, columnasTotales, iteraciones);
 
     // Fecha de corte y actualizacion de historico
+    cout << "----------------------------------------" << endl;
     cout << "Fecha de corte" << endl;
-    Fecha fechaCorte = validarFecha("la fecha de corte");
-    Fecha fechaMaxima = fechaCorte.calcularFechaDias(365);
-    actualizarHistorico(reservas, fechaCorte, "../../data/historico.txt", cantidadReservas, filasTotales, columnasTotales);
-
+    Fecha fechaCorte = validarFecha("la fecha de corte",iteraciones);
+    Fecha fechaMaxima = fechaCorte.calcularFechaDias(365, iteraciones);
+    actualizarHistorico(reservas, fechaCorte, "../../data/historico.txt", cantidadReservas, filasTotales, columnasTotales,iteraciones);
+    cout << endl;
     // Ciclo
     string autenticar;
     do
     {
-        cout << endl
-             << "Seleccione 1 para autenticarse o 0 para salir: ";
+        cout << "----------------------------------------" << endl;
+        cout << "Seleccione 1 para autenticarse o 0 para salir: ";
         cin >> autenticar;
+        cout << endl;
         if (autenticar == "1")
         {
             // Datos para autenticar
-            cout << endl
-                 << "Ingrese el numero de documento: ";
+            cout << "Ingrese el numero de documento: ";
             unsigned char documento[11];
             cin >> documento;
+            cout  << endl;
 
-            if (buscarUsuario<Anfitrion>(anfitriones, cantidadAnfitriones, documento))
+            Anfitrion *usuarioAnfitrion = buscarUsuario<Anfitrion>(anfitriones, cantidadAnfitriones, documento,iteraciones);
+            Huesped* usuarioHuesped = buscarUsuario<Huesped>(huespedes, cantidadHuesped, documento,iteraciones);
+            if (usuarioAnfitrion)
             {
-                Anfitrion *usuario = buscarUsuario<Anfitrion>(anfitriones, cantidadAnfitriones, documento);
                 string modo = "";
                 do
                 {
-                    cout << endl
-                         << "1 para consultar reservas.\n2 para eliminar reservas.\n3 para salir\nEscoge un modo: ";
+                    cout << "----------------------------------------" << endl;
+                    cout << "1 para consultar reservas.\n2 para eliminar reservas.\n3 para salir\nEscoge un modo: ";
                     cin >> modo;
+                    cout << endl;
                     if (modo == "1")
                     {
                         // Consultar reservas
-                        Fecha fechaInicio = validarFecha("comienzo de la consulta");
-                        Fecha fechaFin = validarFecha("fin de la consulta");
+                        cout << "----------------------------------------" << endl;
+                        Fecha fechaInicio = validarFecha("comienzo de la consulta",iteraciones);
+                        Fecha fechaFin = validarFecha("fin de la consulta",iteraciones);
 
-                        cout << fechaInicio.imprimirFecha() << endl;
-                        cout << fechaFin.imprimirFecha() << endl;
-                        usuario->consultarReservas(fechaInicio, fechaFin);
+                        usuarioAnfitrion->consultarReservas(fechaInicio, fechaFin, iteraciones);
                     }
                     else if (modo == "2")
                     {
-                        eliminarReservaAnfitrion(reservas, filasTotales, columnasTotales, cantidadReservas, usuario);
+                        cout << "----------------------------------------" << endl;
+                        eliminarReserva(reservas, filasTotales, columnasTotales, cantidadReservas, usuarioAnfitrion, iteraciones);
                     }
                     else if (modo == "3")
                     {
@@ -67,71 +75,74 @@ int main()
                     }
                 } while (modo != "1" || modo != "2" || modo != "3");
             }
-            else if (buscarUsuario<Huesped>(huespedes, cantidadHuesped, documento))
+            else if (usuarioHuesped)
             {
-                Huesped *usuario = buscarUsuario<Huesped>(huespedes, cantidadHuesped, documento);
                 string modo = "";
                 do
                 {
-                    cout << endl
-                         << "1 para reservar de forma general.\n2 para reservar por codigo.\n3 para eliminar una reserva.\n4 para salir\nEscoge un modo: ";
+                    cout << "----------------------------------------" << endl;
+                    cout << "1 para reservar de forma general.\n2 para reservar por codigo.\n3 para eliminar una reserva.\n4 para salir\nEscoge un modo: ";
                     cin >> modo;
+                    cout << endl;
 
                     if (modo == "1")
                     {
+                        cout << "----------------------------------------" << endl;
                         unsigned int cantidadAlRe = 0;
-                        Fecha fechaInicio = validarFecha("inicio reserva");
+                        Fecha fechaInicio = validarFecha("inicio reserva",iteraciones);
                         while (fechaInicio < fechaCorte || fechaMaxima < fechaInicio)
                         {
-                            cout << endl
-                                 << "La fecha debe ser mayor a la fecha de corte" << endl;
-                            fechaInicio = validarFecha("inicio reserva");
+                            cout << "La fecha debe ser mayor a la fecha de corte" << endl;
+                            fechaInicio = validarFecha("inicio reserva",iteraciones);
                         }
                         string sDuracion;
-                        cout << endl
-                             << "Ingrese la duracion de su reserva (en cantidad de noches): ";
+                        cout << "Ingrese la duracion de su reserva (en cantidad de noches): ";
                         cin >> sDuracion;
+                        cout << endl;
+
                         unsigned char duracion = static_cast<unsigned char>(stoi(sDuracion));
-                        Fecha fechaSalida = fechaInicio.calcularFechaDias(duracion);
+                        Fecha fechaSalida = fechaInicio.calcularFechaDias(duracion,iteraciones);
                         string municipio;
                         float puntuacion = 0;
                         unsigned int precio = UINT_MAX;
-                        cout << endl
-                             << "Ingrese el municipio: ";
+                        cout << "Ingrese el municipio: ";
                         cin >> municipio;
-                        cout << endl
-                             << "Ingrese 1 para filtrar por precio, 2 para filtrar por puntuacion, 3 para filtrar por ambos o cualquier otro numero para no filtrar: ";
+                        cout << endl;
+
+                        cout << "Ingrese 1 para filtrar por precio, 2 para filtrar por puntuacion, 3 para filtrar por ambos o cualquier otro numero para no filtrar: ";
                         string preOPun;
                         cin >> preOPun;
+                        cout << endl;
+
                         if (preOPun == "1")
                         {
-                            cout << endl
-                                 << "Ingrese el precio maximo que esta dispuesto a pagar: ";
+                            cout << "Ingrese el precio maximo que esta dispuesto a pagar: ";
                             cin >> precio;
+                            cout << endl;
                         }
                         else if (preOPun == "2")
                         {
-                            cout << endl
-                                 << "Ingrese la puntuacion minima que debe tener el anfitrion: ";
+                            cout << "Ingrese la puntuacion minima que debe tener el anfitrion: ";
                             cin >> puntuacion;
+                            cout << endl;
                         }
                         else if (preOPun == "3")
                         {
-                            cout << endl
-                                 << "Ingrese el precio maximo que esta dispuesto a pagar: ";
+                            cout << "Ingrese el precio maximo que esta dispuesto a pagar: ";
                             cin >> precio;
-                            cout << endl
-                                 << "Ingrese la puntuacion minima que debe tener el anfitrion: ";
+
+                            cout << endl;
+                            cout << "Ingrese la puntuacion minima que debe tener el anfitrion: ";
                             cin >> puntuacion;
+                            cout << endl;
                         }
 
-                        Alojamiento **alojamientosReservas = reservaConFiltro(alojamientos, cantidadAlojamientos, fechaInicio, fechaSalida, municipio, cantidadAlRe, puntuacion, precio);
+                        Alojamiento **alojamientosReservas = reservaConFiltro(alojamientos, cantidadAlojamientos, fechaInicio, fechaSalida, municipio, cantidadAlRe, puntuacion, precio,iteraciones);
 
-                        cout << "Cantidad Alojamientos Reservas: " << cantidadAlRe << endl;
+                        cout << "----------------------------------------" << endl;
                         if (cantidadAlRe == 0)
                         {
-                            cout << endl
-                                 << "No hay alojamientos disponibles o no existen alojamientos que satisfagan tus preferencias";
+                            cout << "No hay alojamientos disponibles o no existen alojamientos que satisfagan tus preferencias" << endl;
                         }
                         else
                         {
@@ -143,8 +154,8 @@ int main()
                                 if (alojamientosReservas[i] && alojamientosReservas[i]->getCodigoIdentificador() == codigoReserva)
                                 {
 
-                                    string anotaciones = validarAnotaciones();
-                                    Fecha fechaPago = validarFecha("fecha de pago");
+                                    string anotaciones = validarAnotaciones(iteraciones);
+                                    Fecha fechaPago = validarFecha("fecha de pago",iteraciones);
                                     bool mPago = validarMetodoDePago();
 
                                     // Si se llega al final de la columna actual
@@ -195,39 +206,37 @@ int main()
 
                                     columna++;
                                     contadorCodigoReservas++;
-                                    reservas[fila][columna] = new Reserva(anotaciones, fechaInicio, fechaSalida, fechaPago,
-                                                                          alojamientosReservas[i]->getPrecioNoche() * duracion,
-                                                                          usuario, alojamientosReservas[i], contadorCodigoReservas,
-                                                                          duracion, mPago);
-
-                                    alojamientosReservas[i]->agregarReserva(reservas[fila][columna]);
-                                    usuario->agregarReserva(reservas[fila][columna]);
+                                    reservas[fila][columna] = new Reserva(anotaciones, fechaInicio, fechaSalida, fechaPago, alojamientosReservas[i]->getPrecioNoche() * duracion, usuarioHuesped, alojamientosReservas[i], contadorCodigoReservas, duracion, mPago);
+                                    alojamientosReservas[i]->agregarReserva(reservas[fila][columna],iteraciones);
+                                    usuarioHuesped->agregarReserva(reservas[fila][columna],iteraciones);
+                                    imprimir(reservas[fila][columna]);
+                                    break;
                                 }
                             }
                         }
                     }
                     else if (modo == "2")
                     {
-                        Fecha fechaInicio = validarFecha("inicio reserva");
+                        cout << "----------------------------------------" << endl;
+                        Fecha fechaInicio = validarFecha("inicio reserva",iteraciones);
                         while (fechaInicio < fechaCorte || fechaMaxima < fechaInicio)
                         {
-                            cout << endl
-                                 << "La fecha debe ser mayor a la fecha de corte" << endl;
-                            fechaInicio = validarFecha("inicio reserva");
+                            cout << "La fecha debe ser mayor a la fecha de corte" << endl;
+                            fechaInicio = validarFecha("inicio reserva",iteraciones);
                         }
                         string sDuracion;
                         unsigned int duracionTemporal = 0;
                         do
                         {
-                            cout << endl
-                                 << "Ingrese la duracion de su reserva (en cantidad de noches): ";
+                            cout << "Ingrese la duracion de su reserva (en cantidad de noches): ";
                             cin >> sDuracion;
+                            cout << endl;
                             try
                             {
                                 duracionTemporal = stoi(sDuracion);
                                 if (duracionTemporal > UCHAR_MAX)
                                 {
-                                    cout << "La duracion es demasiado larga, maximo puedes reservas por " << UCHAR_MAX << " dias" << endl;
+                                    cout << "La duracion es demasiado larga, maximo puedes reservar por " << UCHAR_MAX << " dias" << endl;
                                     duracionTemporal = 0;
                                 }
                             }
@@ -239,13 +248,13 @@ int main()
                         } while (duracionTemporal == 0);
                         unsigned char duracion = static_cast<unsigned char>(stoi(sDuracion));
 
-                        Fecha fechaSalida = fechaInicio.calcularFechaDias(duracion);
+                        Fecha fechaSalida = fechaInicio.calcularFechaDias(duracion,iteraciones);
 
                         unsigned int codigoAlojamiento = 0;
-                        cout << endl
-                             << "Ingrese el codigo del alojamiento: ";
+                        cout << "Ingrese el codigo del alojamiento: ";
                         cin >> codigoAlojamiento;
-                        Alojamiento *alTemp = buscarPorCodigo(alojamientos, cantidadAlojamientos, codigoAlojamiento);
+                        cout << endl;
+                        Alojamiento *alTemp = buscarPorCodigo(alojamientos, cantidadAlojamientos, codigoAlojamiento, iteraciones);
 
                         for (unsigned int r = 0; r < alTemp->getCantidadReservas(); r++)
                         {
@@ -254,10 +263,9 @@ int main()
                                 Reserva *reTemp = alTemp->getReservasVigentes()[r];
                                 if (((fechaSalida < reTemp->getFechaEntrada()) || (reTemp->getFechaEntrada() < fechaInicio)))
                                 {
-                                    cout << endl
-                                         << "Este alojamiento esta disponible para reservas en esas fechas" << endl;
-                                    string anotaciones = validarAnotaciones();
-                                    Fecha fechaPago = validarFecha("fecha de pago");
+                                    cout << "Este alojamiento esta disponible para reservar en estas fechas: " << endl;
+                                    string anotaciones = validarAnotaciones(iteraciones);
+                                    Fecha fechaPago = validarFecha("fecha de pago", iteraciones);
                                     bool mPago = validarMetodoDePago();
                                     // Si se llega al final de la columna actual
                                     if (columna >= columnasTotales)
@@ -309,17 +317,19 @@ int main()
                                     }
 
                                     contadorCodigoReservas++;
-                                    reservas[fila][columna] = new Reserva(anotaciones, fechaInicio, fechaSalida, fechaPago, alTemp->getPrecioNoche() * duracion, usuario, alTemp, contadorCodigoReservas, duracion, mPago);
-
-                                    alTemp->agregarReserva(reservas[fila][columna]);
-                                    usuario->agregarReserva(reservas[fila][columna]);
+                                    reservas[fila][columna] = new Reserva(anotaciones, fechaInicio, fechaSalida, fechaPago, alTemp->getPrecioNoche() * duracion, usuarioHuesped, alTemp, contadorCodigoReservas, duracion, mPago);
+                                    alTemp->agregarReserva(reservas[fila][columna],iteraciones);
+                                    usuarioHuesped->agregarReserva(reservas[fila][columna],iteraciones);
+                                    imprimir(reservas[fila][columna]);
+                                    break;
                                 }
                             }
                         }
                     }
                     else if (modo == "3")
                     {
-                        eliminarReservaHuesped(reservas, filasTotales, columnasTotales, cantidadReservas, usuario);
+                        cout << "----------------------------------------" << endl;
+                        eliminarReserva(reservas, filasTotales, columnasTotales, cantidadReservas, usuarioHuesped, iteraciones);
                     }
                     else if (modo == "4")
                     {
@@ -329,7 +339,7 @@ int main()
             }
             else
             {
-                cout << "El usuario no existe";
+                cout << "El usuario no existe" << endl;
             }
         }
         else if (autenticar == "0")
@@ -339,9 +349,9 @@ int main()
     } while (autenticar != "1" || autenticar != "0");
 
     // Guardar archivos
-    guardarReservas("../../data/reservas.txt", reservas, filasTotales, columnasTotales, contadorCodigoReservas);
-    guardarHuespedes("../../data/huesped.txt", huespedes, cantidadHuesped);
-    guardarAlojamientos("../../data/alojamientos.txt", alojamientos, cantidadAlojamientos);
+    guardarReservas("../../data/reservas.txt", reservas, filasTotales, columnasTotales, contadorCodigoReservas, iteraciones);
+    guardarHuespedes("../../data/huesped.txt", huespedes, cantidadHuesped, iteraciones);
+    guardarAlojamientos("../../data/alojamientos.txt", alojamientos, cantidadAlojamientos, iteraciones);
 
     // Liberar memoria
     // Alojamientos

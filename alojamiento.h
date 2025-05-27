@@ -40,8 +40,8 @@ public:
     unsigned int getPrecioNoche() const;
     bool *getAmenidades();
     Reserva **getReservasVigentes() const;
-    void eliminarReserva(unsigned int codigoReserva);
-    void agregarReserva(Reserva *reserva);
+    void eliminarReserva(unsigned int codigoReserva, unsigned int &iteraciones);
+    void agregarReserva(Reserva *reserva, unsigned int &iteraciones);
     unsigned char getCantidadReservas() const;
 };
 

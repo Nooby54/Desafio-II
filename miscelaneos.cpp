@@ -20,29 +20,32 @@ bool esValida(unsigned char d, unsigned char m, unsigned short int a)
     return (d >= 1 && d <= diasMes);
 }
 
-string validarAnotaciones()
+string validarAnotaciones(unsigned int &iteraciones)
 {
     string anotaciones;
-    cout << "Ingrese las anotaciones: ";
+    cout << "Ingrese las anotaciones, si no tiene presione enter: ";
     cin.ignore();
     getline(cin, anotaciones);
     while (anotaciones.length() > 1000)
     {
+        iteraciones++;
         cout << "Demasiadas anotaciones, intenta ser mas preciso: ";
         getline(cin, anotaciones);
     }
     return anotaciones;
 }
 
-Fecha validarFecha(string id)
+Fecha validarFecha(string id, unsigned int &iteraciones)
 {
     string diaStr, mesStr;
     unsigned short int anio;
     int dia = -1, mes = -1;
 
     do {
+        iteraciones++;
         cout << "A continuacion debe ingresar una fecha, tenga en cuenta que hasta que no sea una fecha valida no podra continuar" << endl;
         do {
+            iteraciones++;
             cout << "Ingrese el dia de " + id + ": ";
             cin >> diaStr;
             try {
@@ -55,6 +58,7 @@ Fecha validarFecha(string id)
 
 
         do {
+            iteraciones++;
             cout << "Ingrese el mes de " + id + ": ";
             cin >> mesStr;
             try {
@@ -75,13 +79,13 @@ Fecha validarFecha(string id)
 bool validarMetodoDePago()
 {
     bool metodoDePago;
-    cout << "Ingrese el metodo de pago: \n (0) Para PSE \n (1) Tarjeta de credito \n";
+    cout << "(0) Para PSE \n (1) Tarjeta de credito \nIngrese el metodo de pago: ";
     cin >> metodoDePago;
 
     return metodoDePago;
 }
 
-unsigned int contarLineasArchivos(string nombreArchivo)
+unsigned int contarLineasArchivos(string nombreArchivo, unsigned int &iteraciones)
 {
     unsigned int contadorLineas = 0;
     ifstream archivo;
@@ -91,6 +95,7 @@ unsigned int contarLineasArchivos(string nombreArchivo)
 
     while (getline(archivo, linea))
     {
+        iteraciones++;
         contadorLineas++;
     }
 
@@ -98,15 +103,16 @@ unsigned int contarLineasArchivos(string nombreArchivo)
     return contadorLineas;
 }
 
-Alojamiento **cargarAlojamientos(string nombreArchivo, unsigned int &cantidad)
+Alojamiento **cargarAlojamientos(string nombreArchivo, unsigned int &cantidad, unsigned int &iteraciones)
 {
-    unsigned int lineas = contarLineasArchivos(nombreArchivo);
+    unsigned int lineas = contarLineasArchivos(nombreArchivo, iteraciones);
     Alojamiento **alojamientos = new Alojamiento *[lineas];
 
     ifstream archivo(nombreArchivo);
     string lineaArchivo;
     while (getline(archivo, lineaArchivo))
     {
+        iteraciones++;
         unsigned int codigo = 0, precio = 0, i = 0;
         string nombre = "", documento = "", departamento = "", municipio = "", direccion = "";
         bool amenidades[5], tipo;
@@ -116,6 +122,7 @@ Alojamiento **cargarAlojamientos(string nombreArchivo, unsigned int &cantidad)
 
         while (lineaArchivo[i] != ',')
         {
+            iteraciones++;
             codigo = (codigo * 10) + (lineaArchivo[i] - '0');
             i++;
         }
@@ -123,24 +130,28 @@ Alojamiento **cargarAlojamientos(string nombreArchivo, unsigned int &cantidad)
 
         while (lineaArchivo[i] != ',')
         {
+            iteraciones++;
             nombre += lineaArchivo[i++];
         }
         i++;
 
         while (lineaArchivo[i] != ',')
         {
+            iteraciones++;
             documento += lineaArchivo[i++];
         }
         i += 2;
 
         while (lineaArchivo[i] != ',')
         {
+            iteraciones++;
             departamento += lineaArchivo[i++];
         }
         i += 2;
 
         while (lineaArchivo[i] != ',')
         {
+            iteraciones++;
             municipio += lineaArchivo[i++];
         }
         i += 2;
@@ -150,18 +161,21 @@ Alojamiento **cargarAlojamientos(string nombreArchivo, unsigned int &cantidad)
 
         while (lineaArchivo[i] != ',')
         {
+            iteraciones++;
             direccion += lineaArchivo[i++];
         }
         i += 2;
 
         while (lineaArchivo[i] != ',')
         {
+            iteraciones++;
             precio = (precio * 10) + (lineaArchivo[i++] - '0');
         }
         i += 2;
 
         for (int a = 0; a < 5; a++)
         {
+            iteraciones++;
             amenidades[a] = (lineaArchivo[i++] - '0');
             if (lineaArchivo[i] == ' ')
                 i++;
@@ -170,6 +184,7 @@ Alojamiento **cargarAlojamientos(string nombreArchivo, unsigned int &cantidad)
 
         while (i < lineaArchivo.size())
         {
+            iteraciones++;
             if (lineaArchivo[i] == '-')
                 cantidadReservas++;
             i++;
@@ -178,6 +193,7 @@ Alojamiento **cargarAlojamientos(string nombreArchivo, unsigned int &cantidad)
         reservas = new Reserva *[cantidadReservas];
         for (int a = 0; a < cantidadReservas; ++a)
         {
+            iteraciones++;
             reservas[a] = nullptr;
         }
 
@@ -192,12 +208,13 @@ Alojamiento **cargarAlojamientos(string nombreArchivo, unsigned int &cantidad)
 }
 
 template <class T>
-T *buscarPorCodigo(T **datos, unsigned int cantidad, unsigned int codigoBuscado)
+T *buscarPorCodigo(T **datos, unsigned int cantidad, unsigned int codigoBuscado, unsigned int &iteraciones)
 {
     int izquierda = 0, derecha = cantidad - 1;
 
     while (izquierda <= derecha)
     {
+        iteraciones++;
         int medio = (izquierda + derecha) / 2;
         unsigned int codigoActual = datos[medio]->getCodigoIdentificador();
 
@@ -211,9 +228,9 @@ T *buscarPorCodigo(T **datos, unsigned int cantidad, unsigned int codigoBuscado)
     return nullptr;
 }
 
-Anfitrion **cargarAnfitriones(string nombreArchivo, unsigned int &cantidad, Alojamiento **alojamientosTotales, unsigned int cantidadAlojamientosTotales)
+Anfitrion **cargarAnfitriones(string nombreArchivo, unsigned int &cantidad, Alojamiento **alojamientosTotales, unsigned int cantidadAlojamientosTotales, unsigned int &iteraciones)
 {
-    unsigned int lineas = contarLineasArchivos(nombreArchivo), codigo;
+    unsigned int lineas = contarLineasArchivos(nombreArchivo, iteraciones), codigo;
     Anfitrion **anfitriones = new Anfitrion *[lineas];
     ifstream archivo(nombreArchivo);
     string lineaArchivo;
@@ -221,12 +238,14 @@ Anfitrion **cargarAnfitriones(string nombreArchivo, unsigned int &cantidad, Aloj
 
     while (getline(archivo, lineaArchivo))
     {
+        iteraciones++;
         unsigned char documentoAnfitrion[11];
         float puntuacion = 0.0;
         unsigned char antiguedadMeses = 0, cantidadAlojamientos = 0;
         unsigned int i = 0, prei = 0;
         while (lineaArchivo[i] != ',')
         {
+            iteraciones++;
             documentoAnfitrion[i++] = lineaArchivo[i];
         }
         i += 2;
@@ -234,6 +253,7 @@ Anfitrion **cargarAnfitriones(string nombreArchivo, unsigned int &cantidad, Aloj
         string temPun = "";
         while (lineaArchivo[i] != ',')
         {
+            iteraciones++;
             temPun += lineaArchivo[i++];
         }
         puntuacion = stof(temPun);
@@ -241,6 +261,7 @@ Anfitrion **cargarAnfitriones(string nombreArchivo, unsigned int &cantidad, Aloj
 
         while (lineaArchivo[i] != ',')
         {
+            iteraciones++;
             antiguedadMeses = (antiguedadMeses * 10) + (lineaArchivo[i++] - '0');
         }
         i++;
@@ -248,6 +269,7 @@ Anfitrion **cargarAnfitriones(string nombreArchivo, unsigned int &cantidad, Aloj
         prei = i;
         while (i < lineaArchivo.size())
         {
+            iteraciones++;
             if (lineaArchivo[i] == '-')
                 cantidadAlojamientos++;
             i++;
@@ -259,6 +281,7 @@ Anfitrion **cargarAnfitriones(string nombreArchivo, unsigned int &cantidad, Aloj
 
         while (prei < lineaArchivo.size())
         {
+            iteraciones++;
             prei++;
             if (lineaArchivo[prei] >= '0' && lineaArchivo[prei] <= '9')
             {
@@ -267,7 +290,7 @@ Anfitrion **cargarAnfitriones(string nombreArchivo, unsigned int &cantidad, Aloj
             else if (lineaArchivo[prei] == '-' || prei == lineaArchivo.size())
             {
                 // Buscar en el arreglo
-                Alojamiento *alojamientoEncontrado = buscarPorCodigo<Alojamiento>(alojamientosTotales, cantidadAlojamientosTotales, codigo);
+                Alojamiento *alojamientoEncontrado = buscarPorCodigo<Alojamiento>(alojamientosTotales, cantidadAlojamientosTotales, codigo,iteraciones);
                 alojamientos[idx++] = alojamientoEncontrado;
                 codigo = 0;
             }
@@ -278,6 +301,7 @@ Anfitrion **cargarAnfitriones(string nombreArchivo, unsigned int &cantidad, Aloj
 
         for (unsigned int i = 0; i < cantidadAlojamientos; i++)
         {
+            iteraciones++;
             alojamientos[i]->setAnfitrionResponsable((anfitriones[cantidad]));
         }
         cantidad++;
@@ -286,17 +310,19 @@ Anfitrion **cargarAnfitriones(string nombreArchivo, unsigned int &cantidad, Aloj
     return anfitriones;
 }
 
-Reserva ***cargarReserva(string nombreArchivo, unsigned int &cantidad, unsigned int &bloques, unsigned int &fila, unsigned int &columna, unsigned int &cCodigo, Alojamiento **alojamientosTotales, unsigned int cantidadAlojamientosTotales)
+Reserva ***cargarReserva(string nombreArchivo, unsigned int &cantidad, unsigned int &bloques, unsigned int &fila, unsigned int &columna, unsigned int &cCodigo, Alojamiento **alojamientosTotales, unsigned int cantidadAlojamientosTotales, unsigned int &iteraciones)
 {
-    unsigned int lineas = contarLineasArchivos(nombreArchivo) - 1;
+    unsigned int lineas = contarLineasArchivos(nombreArchivo,iteraciones) - 1;
     bloques = (lineas / 10 > 8) ? (lineas / 10) : 8;
 
     Reserva ***reservas = new Reserva **[bloques * 2];
     for (unsigned int i = 0; i < bloques * 2; ++i)
     {
+        iteraciones++;
         reservas[i] = new Reserva *[bloques];
         for (unsigned int j = 0; j < bloques; ++j)
         {
+            iteraciones++;
             reservas[i][j] = nullptr;
         }
     }
@@ -306,10 +332,12 @@ Reserva ***cargarReserva(string nombreArchivo, unsigned int &cantidad, unsigned 
     cantidad = 0;
     unsigned int i = 0;
     getline(archivo, lineaArchivo);
-    while (lineaArchivo[i] != '-')
-        cCodigo = (cCodigo * 10) + (lineaArchivo[i++] - '0');
+    while (lineaArchivo[i] != '-'){
+        iteraciones++;
+        cCodigo = (cCodigo * 10) + (lineaArchivo[i++] - '0');}
     while (getline(archivo, lineaArchivo))
     {
+        iteraciones++;
         string anotaciones;
         unsigned char dia = 0, mes = 0, duracion = 0;
         unsigned short anio = 0;
@@ -321,30 +349,35 @@ Reserva ***cargarReserva(string nombreArchivo, unsigned int &cantidad, unsigned 
         i = 0;
         while (lineaArchivo[i] != ',')
         {
+            iteraciones++;
             codigoReserva = (codigoReserva * 10) + (lineaArchivo[i++] - '0');
         }
         i += 2;
 
         while (lineaArchivo[i] != ',')
         {
+            iteraciones++;
             codigoAlojamiento = (codigoAlojamiento * 10) + (lineaArchivo[i++] - '0');
         }
-        alojamientoReserva = buscarPorCodigo<Alojamiento>(alojamientosTotales, cantidadAlojamientosTotales, codigoAlojamiento);
+        alojamientoReserva = buscarPorCodigo<Alojamiento>(alojamientosTotales, cantidadAlojamientosTotales, codigoAlojamiento,iteraciones);
 
         i += 2;
 
         while (lineaArchivo[i] != '-')
         {
+            iteraciones++;
             dia = (dia * 10) + (lineaArchivo[i++] - '0');
         }
         i++;
         while (lineaArchivo[i] != '-')
         {
+            iteraciones++;
             mes = (mes * 10) + (lineaArchivo[i++] - '0');
         }
         i++;
         while (lineaArchivo[i] != ',')
         {
+            iteraciones++;
             anio = (anio * 10) + (lineaArchivo[i++] - '0');
         }
         i += 2;
@@ -356,6 +389,7 @@ Reserva ***cargarReserva(string nombreArchivo, unsigned int &cantidad, unsigned 
 
         while (lineaArchivo[i] != ',')
         {
+            iteraciones++;
             duracion = (duracion * 10) + (lineaArchivo[i++] - '0');
         }
 
@@ -363,16 +397,19 @@ Reserva ***cargarReserva(string nombreArchivo, unsigned int &cantidad, unsigned 
 
         while (lineaArchivo[i] != '-')
         {
+            iteraciones++;
             dia = (dia * 10) + (lineaArchivo[i++] - '0');
         }
         i++;
         while (lineaArchivo[i] != '-')
         {
+            iteraciones++;
             mes = (mes * 10) + (lineaArchivo[i++] - '0');
         }
         i++;
         while (lineaArchivo[i] != ',')
         {
+            iteraciones++;
             anio = (anio * 10) + (lineaArchivo[i++] - '0');
         }
         i += 14;
@@ -385,27 +422,32 @@ Reserva ***cargarReserva(string nombreArchivo, unsigned int &cantidad, unsigned 
         i += 3;
         while (lineaArchivo[i] != '-')
         {
+            iteraciones++;
             dia = (dia * 10) + (lineaArchivo[i++] - '0');
         }
         i++;
         while (lineaArchivo[i] != '-')
         {
+            iteraciones++;
             mes = (mes * 10) + (lineaArchivo[i++] - '0');
         }
         i++;
         while (lineaArchivo[i] != ',')
         {
+            iteraciones++;
             anio = (anio * 10) + (lineaArchivo[i++] - '0');
         }
         Fecha fechaPago(dia, mes, anio);
         i += 2;
         while (lineaArchivo[i] != ',')
         {
+            iteraciones++;
             monto = (monto * 10) + (lineaArchivo[i++] - '0');
         }
         i += 2;
         while (i < lineaArchivo.size())
         {
+            iteraciones++;
             anotaciones += lineaArchivo[i++];
         }
 
@@ -419,6 +461,7 @@ Reserva ***cargarReserva(string nombreArchivo, unsigned int &cantidad, unsigned 
 
         for (unsigned char b = 0; b < alojamientoReserva->getCantidadReservas(); b++)
         {
+            iteraciones++;
             if ((alojamientoReserva->getReservasVigentes())[b] == nullptr)
             {
                 (alojamientoReserva->getReservasVigentes())[b] = reservas[fila][columna];
@@ -432,15 +475,17 @@ Reserva ***cargarReserva(string nombreArchivo, unsigned int &cantidad, unsigned 
     return reservas;
 }
 
-Reserva *buscarReservaPorCodigo(Reserva ***reservas, unsigned int filas, unsigned int columnas, unsigned int codigoBuscado)
+Reserva *buscarReservaPorCodigo(Reserva ***reservas, unsigned int filas, unsigned int columnas, unsigned int codigoBuscado, unsigned int &iteraciones)
 {
     for (unsigned int i = 0; i < filas; ++i)
     {
+        iteraciones++;
         if (!reservas[i])
             continue;
 
         for (unsigned int j = 0; j < columnas; ++j)
         {
+            iteraciones++;
             if (!reservas[i][j])
                 continue;
             if (reservas[i][j]->getCodigoIdentificador() == codigoBuscado)
@@ -452,9 +497,9 @@ Reserva *buscarReservaPorCodigo(Reserva ***reservas, unsigned int filas, unsigne
     return nullptr;
 }
 
-Huesped **cargarHuesped(string nombreArchivo, unsigned int &cantidad, Reserva ***reservasTotales, unsigned int filas, unsigned int bloques)
+Huesped **cargarHuesped(string nombreArchivo, unsigned int &cantidad, Reserva ***reservasTotales, unsigned int filas, unsigned int bloques, unsigned int &iteraciones)
 {
-    unsigned int lineas = contarLineasArchivos(nombreArchivo), codigo;
+    unsigned int lineas = contarLineasArchivos(nombreArchivo,iteraciones), codigo;
     Huesped **huespeds = new Huesped *[lineas];
     ifstream archivo(nombreArchivo);
     string lineaArchivo;
@@ -462,12 +507,14 @@ Huesped **cargarHuesped(string nombreArchivo, unsigned int &cantidad, Reserva **
 
     while (getline(archivo, lineaArchivo))
     {
+        iteraciones++;
         unsigned char documentoHuesped[11];
         float puntuacion = 0.0;
         unsigned char antiguedadMeses = 0, cantidadReservas = 0;
         unsigned int i = 0, prei = 0;
         while (lineaArchivo[i] != ',')
         {
+            iteraciones++;
             documentoHuesped[i++] = lineaArchivo[i];
         }
         i += 2;
@@ -475,6 +522,7 @@ Huesped **cargarHuesped(string nombreArchivo, unsigned int &cantidad, Reserva **
         string temPun = "";
         while (lineaArchivo[i] != ',')
         {
+            iteraciones++;
             temPun += lineaArchivo[i++];
         }
         puntuacion = stof(temPun);
@@ -482,6 +530,7 @@ Huesped **cargarHuesped(string nombreArchivo, unsigned int &cantidad, Reserva **
 
         while (lineaArchivo[i] != ',')
         {
+            iteraciones++;
             antiguedadMeses = (antiguedadMeses * 10) + (lineaArchivo[i++] - '0');
         }
         i++;
@@ -489,6 +538,7 @@ Huesped **cargarHuesped(string nombreArchivo, unsigned int &cantidad, Reserva **
         prei = i;
         while (i < lineaArchivo.size())
         {
+            iteraciones++;
             if (lineaArchivo[i] == '-')
                 cantidadReservas++;
             i++;
@@ -500,6 +550,7 @@ Huesped **cargarHuesped(string nombreArchivo, unsigned int &cantidad, Reserva **
 
         while (prei < lineaArchivo.size())
         {
+            iteraciones++;
             prei++;
             if (lineaArchivo[prei] >= '0' && lineaArchivo[prei] <= '9')
             {
@@ -508,7 +559,7 @@ Huesped **cargarHuesped(string nombreArchivo, unsigned int &cantidad, Reserva **
             else if (lineaArchivo[prei] == '-' && lineaArchivo[prei] != ' ')
             {
                 // Buscar en el arreglo
-                Reserva *reservaEncontrada = buscarReservaPorCodigo(reservasTotales, filas, bloques, codigo);
+                Reserva *reservaEncontrada = buscarReservaPorCodigo(reservasTotales, filas, bloques, codigo,iteraciones);
                 reservas[idx++] = reservaEncontrada;
                 codigo = 0;
             }
@@ -520,6 +571,7 @@ Huesped **cargarHuesped(string nombreArchivo, unsigned int &cantidad, Reserva **
 
         for (unsigned int j = 0; j < cantidadReservas; j++)
         {
+            iteraciones++;
             if (reservas[j])
             {
                 reservas[j]->setHuesped(huespeds[cantidad]);
@@ -532,10 +584,11 @@ Huesped **cargarHuesped(string nombreArchivo, unsigned int &cantidad, Reserva **
     return huespeds;
 }
 
-bool interseccionFechas(Alojamiento *alojamiento, Huesped *huesped, Fecha fechaInicio, Fecha fechaFin)
+bool interseccionFechas(Alojamiento *alojamiento, Huesped *huesped, Fecha fechaInicio, Fecha fechaFin, unsigned int &iteraciones)
 {
     for (unsigned char r = 0; r < alojamiento->getCantidadReservas(); r++)
     {
+        iteraciones++;
         Reserva *reserva = alojamiento->getReservasVigentes()[r];
         if ((fechaInicio >= reserva->getFechaEntrada() && fechaInicio <= reserva->getFechaSalida()) || (fechaFin >= reserva->getFechaEntrada() && fechaFin <= reserva->getFechaSalida()))
         {
@@ -544,6 +597,7 @@ bool interseccionFechas(Alojamiento *alojamiento, Huesped *huesped, Fecha fechaI
     }
     for (unsigned char r = 0; r < huesped->getCantidadReservas() - 1; r++)
     {
+        iteraciones++;
         Reserva *reserva = huesped->getReservas()[r];
         if ((fechaInicio >= reserva->getFechaEntrada() && fechaInicio <= reserva->getFechaSalida()) || (fechaFin >= reserva->getFechaEntrada() && fechaFin <= reserva->getFechaSalida()))
         {
@@ -554,7 +608,7 @@ bool interseccionFechas(Alojamiento *alojamiento, Huesped *huesped, Fecha fechaI
     return false;
 }
 
-void actualizarHistorico(Reserva ***reservas, Fecha fecha, string nombreArchivo, unsigned int &cantidad, unsigned int filas, unsigned int columnas)
+void actualizarHistorico(Reserva ***reservas, Fecha fecha, string nombreArchivo, unsigned int &cantidad, unsigned int filas, unsigned int columnas, unsigned int &iteraciones)
 {
     ofstream archivo(nombreArchivo, ios::app);
 
@@ -562,19 +616,21 @@ void actualizarHistorico(Reserva ***reservas, Fecha fecha, string nombreArchivo,
 
     for (unsigned int i = 0; i < filas; ++i)
     {
+        iteraciones++;
         if (!reservas[i])
             continue;
 
         for (unsigned int j = 0; j < columnas; ++j)
         {
+            iteraciones++;
             if (reservas[i][j])
             {
                 if (reservas[i][j]->getFechaEntrada() < fecha)
                 {
                     Reserva *reTemp = reservas[i][j];
                     archivo << reTemp->getCodigoIdentificador() << ", " << reTemp->getAlojamientoReserva()->getCodigoIdentificador() << ", " << (int)reTemp->getFechaEntrada().getDia() << "-" << (int)reTemp->getFechaEntrada().getMes() << "-" << reTemp->getFechaEntrada().getAnio() << ", " << (int)reTemp->getDuracion() << ", " << (int)reTemp->getFechaSalida().getDia() << "-" << (int)reTemp->getFechaSalida().getMes() << "-" << reTemp->getFechaSalida().getAnio() << ", " << reTemp->getHuesped()->getDocumento() << ", " << reTemp->getMetodoPago() << ", " << (int)reTemp->getFechaPago().getDia() << "-" << (int)reTemp->getFechaPago().getMes() << "-" << reTemp->getFechaPago().getAnio() << ", " << reTemp->getMonto() << ", " << reTemp->getAnotaciones() << "\n";
-                    reTemp->getHuesped()->eliminarReserva(reTemp->getCodigoIdentificador());
-                    reTemp->getAlojamientoReserva()->eliminarReserva(reTemp->getCodigoIdentificador());
+                    reTemp->getHuesped()->eliminarReserva(reTemp->getCodigoIdentificador(),iteraciones);
+                    reTemp->getAlojamientoReserva()->eliminarReserva(reTemp->getCodigoIdentificador(),iteraciones);
                     delete reservas[i][j];
                     reservas[i][j] = nullptr;
                     cantidad--;
@@ -599,6 +655,7 @@ void actualizarHistorico(Reserva ***reservas, Fecha fecha, string nombreArchivo,
 
     for (unsigned int i = k; i < filas * columnas; ++i)
     {
+        iteraciones++;
         unsigned int filaNueva = i / columnas;
         unsigned int colNueva = i % columnas;
         reservas[filaNueva][colNueva] = nullptr;
@@ -607,7 +664,7 @@ void actualizarHistorico(Reserva ***reservas, Fecha fecha, string nombreArchivo,
     archivo.close();
 }
 
-void guardarAlojamientos(const std::string &nombreArchivo, Alojamiento **alojamientos, int cantidad)
+void guardarAlojamientos(const std::string &nombreArchivo, Alojamiento **alojamientos, int cantidad, unsigned int &iteraciones)
 {
     if (!alojamientos)
         return;
@@ -620,6 +677,7 @@ void guardarAlojamientos(const std::string &nombreArchivo, Alojamiento **alojami
 
     for (int i = 0; i < cantidad; ++i)
     {
+        iteraciones++;
         Alojamiento *a = alojamientos[i];
         if (!a)
             continue;
@@ -641,6 +699,7 @@ void guardarAlojamientos(const std::string &nombreArchivo, Alojamiento **alojami
         {
             for (int j = 0; j < 5; ++j)
             {
+                iteraciones++;
                 archivo << (amenidades[j] ? 1 : 0);
                 if (j < 4)
                     archivo << " ";
@@ -659,6 +718,7 @@ void guardarAlojamientos(const std::string &nombreArchivo, Alojamiento **alojami
         {
             for (int j = 0; j < cantidadReservas; ++j)
             {
+                iteraciones++;
                 archivo << reservas[j]->getCodigoIdentificador();
                 archivo << " -";
             }
@@ -670,7 +730,7 @@ void guardarAlojamientos(const std::string &nombreArchivo, Alojamiento **alojami
     archivo.close();
 }
 
-void guardarHuespedes(const std::string &nombreArchivo, Huesped **huespedes, int cantidad)
+void guardarHuespedes(const std::string &nombreArchivo, Huesped **huespedes, int cantidad, unsigned int &iteraciones)
 {
     if (!huespedes)
         return;
@@ -684,6 +744,7 @@ void guardarHuespedes(const std::string &nombreArchivo, Huesped **huespedes, int
 
     for (int i = 0; i < cantidad; ++i)
     {
+        iteraciones++;
         Huesped *h = huespedes[i];
         if (!h)
             continue;
@@ -699,6 +760,7 @@ void guardarHuespedes(const std::string &nombreArchivo, Huesped **huespedes, int
         {
             for (int j = 0; j < cantidadReservas; ++j)
             {
+                iteraciones++;
                 archivo << r[j]->getCodigoIdentificador();
                 if (j < cantidadReservas)
                     archivo << " - ";
@@ -711,7 +773,7 @@ void guardarHuespedes(const std::string &nombreArchivo, Huesped **huespedes, int
     archivo.close();
 }
 
-void guardarReservas(const std::string &nombreArchivo, Reserva ***reservas, unsigned int filas, unsigned int columnas, unsigned int cantidad)
+void guardarReservas(const std::string &nombreArchivo, Reserva ***reservas, unsigned int filas, unsigned int columnas, unsigned int cantidad, unsigned int &iteraciones)
 {
     std::ofstream archivo(nombreArchivo);
     if (!archivo.is_open())
@@ -721,8 +783,10 @@ void guardarReservas(const std::string &nombreArchivo, Reserva ***reservas, unsi
 
     for (unsigned int i = 0; i < filas; ++i)
     {
+        iteraciones++;
         for (unsigned int j = 0; j < columnas; ++j)
         {
+            iteraciones++;
             if (!reservas[i][j])
                 continue;
 
@@ -739,8 +803,9 @@ void guardarReservas(const std::string &nombreArchivo, Reserva ***reservas, unsi
                     << r->getFechaSalida().getAnio() << ", ";
 
             unsigned char *doc = r->getHuesped()->getDocumento();
-            for (int k = 0; k < 10; ++k)
-                archivo << static_cast<char>(doc[k]);
+            for (int k = 0; k < 10; ++k){
+                iteraciones++;
+                archivo << static_cast<char>(doc[k]);}
             archivo << ", ";
 
             archivo << r->getMetodoPago() << ", "
@@ -755,7 +820,7 @@ void guardarReservas(const std::string &nombreArchivo, Reserva ***reservas, unsi
     archivo.close();
 }
 
-void eliminarReservaHuesped(Reserva ***&reservas, unsigned int filasTotales, unsigned int columnasTotales, unsigned int &cantidadReservas, Huesped*& huesped)
+void eliminarReserva(Reserva ***&reservas, unsigned int filasTotales, unsigned int columnasTotales, unsigned int &cantidadReservas, Huesped*& huesped, unsigned int &iteraciones)
 {
     bool reservaExiste = false, reservaPertenece = false;
     unsigned int eliminarReserva = 0;
@@ -763,6 +828,7 @@ void eliminarReservaHuesped(Reserva ***&reservas, unsigned int filasTotales, uns
     cin >> eliminarReserva;
 
     for(unsigned int i = 0; i < huesped->getCantidadReservas();i++){
+        iteraciones++;
         if(!huesped->getReservas()[i]) continue;
         if(huesped->getReservas()[i]->getCodigoIdentificador() == eliminarReserva){
             reservaPertenece = true;
@@ -772,18 +838,19 @@ void eliminarReservaHuesped(Reserva ***&reservas, unsigned int filasTotales, uns
     if(reservaPertenece){
         for (unsigned int i = 0; i < filasTotales; ++i)
         {
+            iteraciones++;
             if (!reservas[i])
                 continue;
 
             for (unsigned int j = 0; j < columnasTotales; ++j)
             {
-
+                iteraciones++;
                 if (!reservas[i][j])
                     continue;
                 if (reservas[i][j]->getCodigoIdentificador() == eliminarReserva)
                 {
-                    reservas[i][j]->getHuesped()->eliminarReserva(eliminarReserva);
-                    reservas[i][j]->getAlojamientoReserva()->eliminarReserva(eliminarReserva);
+                    reservas[i][j]->getHuesped()->eliminarReserva(eliminarReserva,iteraciones);
+                    reservas[i][j]->getAlojamientoReserva()->eliminarReserva(eliminarReserva,iteraciones);
                     delete reservas[i][j];
                     reservas[i][j] = nullptr;
                     reservaExiste = true;
@@ -800,18 +867,17 @@ void eliminarReservaHuesped(Reserva ***&reservas, unsigned int filasTotales, uns
     }
 }
 
-void eliminarReservaAnfitrion(Reserva ***&reservas, unsigned int filasTotales, unsigned int columnasTotales, unsigned int &cantidadReservas, Anfitrion*& anfitrion){
-
+void eliminarReserva(Reserva ***&reservas, unsigned int filasTotales, unsigned int columnasTotales, unsigned int &cantidadReservas, Anfitrion*& anfitrion, unsigned int &iteraciones){
     bool reservaExiste = false, reservaPertenece = false;
     unsigned int eliminarReserva = 0;
     cout << "Ingrese el codigo de la reserva a eliminar: ";
     cin >> eliminarReserva;
 
     for(unsigned int i = 0; i < anfitrion->getCantidadAlojamientos();i++){
-        //cout << anfitrion->getAlojamientos()[i]->getCantidadReservas() << endl;
+        iteraciones++;
         for(unsigned int j = 0; j < anfitrion->getAlojamientos()[i]->getCantidadReservas();j++){
+            iteraciones++;
             if(!anfitrion->getAlojamientos()[i]->getReservasVigentes()[j]) continue;
-            //cout << anfitrion->getAlojamientos()[i]->getReservasVigentes()[j]->getCodigoIdentificador() << endl;
             if(anfitrion->getAlojamientos()[i]->getReservasVigentes()[j]->getCodigoIdentificador() == eliminarReserva){
                 reservaPertenece = true;
                 break;
@@ -821,18 +887,19 @@ void eliminarReservaAnfitrion(Reserva ***&reservas, unsigned int filasTotales, u
     if(reservaPertenece){
         for (unsigned int i = 0; i < filasTotales; ++i)
         {
+            iteraciones++;
             if (!reservas[i])
                 continue;
 
             for (unsigned int j = 0; j < columnasTotales; ++j)
             {
-
+                iteraciones++;
                 if (!reservas[i][j])
                     continue;
                 if (reservas[i][j]->getCodigoIdentificador() == eliminarReserva)
                 {
-                    reservas[i][j]->getHuesped()->eliminarReserva(eliminarReserva);
-                    reservas[i][j]->getAlojamientoReserva()->eliminarReserva(eliminarReserva);
+                    reservas[i][j]->getHuesped()->eliminarReserva(eliminarReserva,iteraciones);
+                    reservas[i][j]->getAlojamientoReserva()->eliminarReserva(eliminarReserva,iteraciones);
                     delete reservas[i][j];
                     reservas[i][j] = nullptr;
                     reservaExiste = true;
@@ -850,20 +917,21 @@ void eliminarReservaAnfitrion(Reserva ***&reservas, unsigned int filasTotales, u
 
 }
 
-
-Alojamiento **reservaConFiltro(Alojamiento **alojamientos, unsigned int cantidadAlojamientos, Fecha fechaInicio, Fecha fechaFin, string municipio, unsigned int &cantidad, float puntuacion, unsigned int precio)
+Alojamiento **reservaConFiltro(Alojamiento **alojamientos, unsigned int cantidadAlojamientos, Fecha fechaInicio, Fecha fechaFin, string municipio, unsigned int &cantidad, float puntuacion, unsigned int precio, unsigned int &iteraciones)
 {
     Alojamiento **alojamientosDisponibles = new Alojamiento *[5];
     unsigned int guia = 0;
     cantidad = 5;
     for (unsigned int i = 0; i < cantidadAlojamientos; i++)
     {
+        iteraciones++;
         if (!alojamientos[i])
             continue;
         Alojamiento *alTemp = alojamientos[i];
         bool visitado = false;
         for (unsigned int r = 0; r < alTemp->getCantidadReservas(); r++)
         {
+            iteraciones++;
             if (alTemp->getReservasVigentes()[r])
             {
                 Reserva *reTemp = alTemp->getReservasVigentes()[r];
@@ -880,8 +948,7 @@ Alojamiento **reservaConFiltro(Alojamiento **alojamientos, unsigned int cantidad
                     }
                     else
                     {
-                        // void redimensionarArreglo(T**& arreglo, unsigned int cantidad);
-                        redimensionarArreglo(alojamientosDisponibles, cantidad, cantidad + 5);
+                        redimensionarArreglo(alojamientosDisponibles, cantidad, cantidad + 5,iteraciones);
                         cantidad += 5;
                         alojamientosDisponibles[guia] = alTemp;
                     }
@@ -890,11 +957,22 @@ Alojamiento **reservaConFiltro(Alojamiento **alojamientos, unsigned int cantidad
             }
         }
     }
-
-    while (guia < cantidad)
-    {
-        alojamientosDisponibles[guia] = nullptr;
-        guia++;
-    }
     return alojamientosDisponibles;
+}
+
+void imprimir(Reserva*& reserva){
+    cout << endl;
+    cout << "----------------------------------------" << endl;
+    cout << "CONFIRMACION DE LA RESERVA" << endl;
+    cout << "Codigo: " << reserva->getCodigoIdentificador() << endl;
+    cout << "Informacion del alojamiento" << endl;
+    cout << "Nombre: " << reserva->getAlojamientoReserva()->getNombreAlojamiento() << endl;
+    cout << "Codigo: " << reserva->getAlojamientoReserva()->getCodigoIdentificador() << endl;
+    cout << "La reserva comienza un: " << reserva->getFechaEntrada().imprimirFecha() << endl;
+    cout << "La reserva termina un: " << reserva->getFechaSalida().imprimirFecha() << endl;
+}
+
+void imprimir(unsigned int iteraciones, size_t tamanioObjetos){
+    cout << "Cantidad de iteraciones: " << iteraciones << endl;
+    cout << "Tamanio de los objetos: " << tamanioObjetos << endl;
 }

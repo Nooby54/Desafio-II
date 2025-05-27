@@ -1,7 +1,5 @@
 #include "fecha.h"
 
-#include <iostream>
-
 using namespace std;
 
 Fecha::Fecha(const Fecha &otra) : dia(otra.dia), mes(otra.mes), anio(otra.anio) {}
@@ -11,10 +9,10 @@ Fecha::Fecha(unsigned char d, unsigned char m, unsigned short int a)
 
 Fecha::~Fecha() {}
 
-Fecha Fecha::calcularFechaDias(unsigned short int dias)
+Fecha Fecha::calcularFechaDias(unsigned short int dias, unsigned int &iteraciones)
 {
     Fecha nuevaFecha = *this;
-
+    iteraciones+=dias;
     if (dias > 0)
         nuevaFecha += dias;
     else if (dias < 0)

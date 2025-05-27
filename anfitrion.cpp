@@ -8,8 +8,7 @@ using namespace std;
 Anfitrion::Anfitrion(unsigned char (&documento)[11], float p, unsigned char antiguedad, unsigned char cAl, Alojamiento **alojamientos)
     : puntuacion(p), antiguedadMeses(antiguedad), cantidadAlojamientos(cAl), alojamientos(alojamientos)
 {
-    for (unsigned char i = 0; i < 11; i++)
-        documentoAnfitrion[i] = documento[i];
+    memcpy(documentoAnfitrion, documento, 11*sizeof(char));
 }
 
 Anfitrion::~Anfitrion() {}
@@ -24,12 +23,14 @@ void Anfitrion::setAlojamientos(Alojamiento **nuevosAlojamientos)
     alojamientos = nuevosAlojamientos;
 }
 
-void Anfitrion::consultarReservas(Fecha fechaInicio, Fecha fechaFin)
+void Anfitrion::consultarReservas(Fecha fechaInicio, Fecha fechaFin, unsigned int &iteraciones)
 {
     for (unsigned int i = 0; i < cantidadAlojamientos; i++)
     {
+        iteraciones++;
         for (unsigned char r = 0; r < this->alojamientos[i]->getCantidadReservas(); r++)
         {
+            iteraciones++;
             Reserva *reserva = this->alojamientos[i]->getReservasVigentes()[r];
             if (reserva->getFechaEntrada() >= fechaInicio && reserva->getFechaEntrada() <= fechaFin)
             {

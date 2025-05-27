@@ -15,8 +15,8 @@ private:
 public:
     Huesped(unsigned char (&documentoHuesped)[11], float p, unsigned char aM, unsigned char cReservas, Reserva **rH);
     Reserva **getReservas() const;
-    void agregarReserva(Reserva *reserva);
-    void eliminarReserva(unsigned int codigoReserva);
+    void agregarReserva(Reserva *reserva, unsigned int &iteraciones);
+    void eliminarReserva(unsigned int codigoReserva, unsigned int &iteraciones);
     unsigned char *getDocumento();
     float getPuntuacion();
     unsigned char getAntiguedadMeses();

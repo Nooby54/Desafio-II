@@ -17,7 +17,7 @@ public:
     Fecha(unsigned char d, unsigned char m, unsigned short int a);
     ~Fecha();
 
-    Fecha calcularFechaDias(unsigned short int dias);
+    Fecha calcularFechaDias(unsigned short int dias, unsigned int &iteraciones);
     std::string obtenerDiaSemana() const;
     std::string imprimirFecha() const;
 
