@@ -13,11 +13,11 @@ private:
     unsigned char obtenerDiasMes() const;
 
 public:
-    Fecha(const Fecha& otra);
+    Fecha(const Fecha &otra);
     Fecha(unsigned char d, unsigned char m, unsigned short int a);
     ~Fecha();
 
-    Fecha calcularFechaDias(const Fecha& fechaBase, unsigned short int dias);
+    Fecha calcularFechaDias(unsigned short int dias);
     std::string obtenerDiaSemana() const;
     std::string imprimirFecha() const;
 
@@ -25,18 +25,16 @@ public:
     unsigned short int getAnio() const;
     unsigned char getMes() const;
 
+    Fecha &operator-=(unsigned char dias);
+    Fecha &operator+=(unsigned char dias);
+    Fecha &operator=(const Fecha &otra);
+    Fecha &operator--();
+    Fecha &operator++();
 
-    Fecha& operator-=(unsigned char dias);
-    Fecha& operator+=(unsigned char dias);
-    Fecha& operator=(const Fecha& otra);
-    Fecha& operator--();
-    Fecha& operator++();
-
-    bool operator==(const Fecha& otra) const;
-    bool operator<(const Fecha& otra) const;
-    bool operator>=(const Fecha& otra) const;
-    bool operator<=(const Fecha& otra) const;
+    bool operator==(const Fecha &otra) const;
+    bool operator<(const Fecha &otra) const;
+    bool operator>=(const Fecha &otra) const;
+    bool operator<=(const Fecha &otra) const;
 };
 
 #endif // FECHA_H
-

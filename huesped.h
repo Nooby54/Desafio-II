@@ -9,14 +9,15 @@ private:
     float puntuacion;
     unsigned char antiguedadMeses;
     unsigned char cantidadReservas;
-    Reserva** reservas;
+    unsigned char tamReservas;
+    Reserva **reservas;
 
 public:
     Huesped(unsigned char (&documentoHuesped)[11], float p, unsigned char aM, unsigned char cReservas, Reserva **rH);
-    Reserva** getReservas() const;
-    void setReservas(Reserva** &nreservas);
+    Reserva **getReservas() const;
+    void agregarReserva(Reserva *reserva);
     void eliminarReserva(unsigned int codigoReserva);
-    unsigned char* getDocumento();
+    unsigned char *getDocumento();
     float getPuntuacion();
     unsigned char getAntiguedadMeses();
     unsigned char getCantidadReservas() const;

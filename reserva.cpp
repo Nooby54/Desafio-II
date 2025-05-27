@@ -39,15 +39,18 @@ unsigned int Reserva::getMonto() const
     return monto;
 }
 
-Huesped *Reserva::getHuesped() const{
+Huesped *Reserva::getHuesped() const
+{
     return huespedReserva;
 }
 
-void Reserva::setHuesped(Huesped* huesped){
+void Reserva::setHuesped(Huesped *huesped)
+{
     huespedReserva = huesped;
 }
 
-Alojamiento *Reserva::getAlojamientoReserva() const{
+Alojamiento *Reserva::getAlojamientoReserva() const
+{
     return alojamientoReserva;
 }
 
