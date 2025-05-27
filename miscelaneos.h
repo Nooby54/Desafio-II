@@ -25,7 +25,8 @@ void actualizarHistorico(Reserva ***reservas, Fecha fecha, string nombreArchivo,
 void guardarReservas(const std::string &nombreArchivo, Reserva ***reservas, unsigned int filas, unsigned int columnas, unsigned int cantidad);
 void guardarHuespedes(const std::string &nombreArchivo, Huesped **huespedes, int cantidad);
 void guardarAlojamientos(const std::string &nombreArchivo, Alojamiento **alojamientos, int cantidad);
-void eliminarReserva(Reserva ***&reservas, unsigned int filasTotales, unsigned int columnasTotales, unsigned int &cantidadReservas);
+void eliminarReservaHuesped(Reserva ***&reservas, unsigned int filasTotales, unsigned int columnasTotales, unsigned int &cantidadReservas, Huesped*& huesped);
+void eliminarReservaAnfitrion(Reserva ***&reservas, unsigned int filasTotales, unsigned int columnasTotales, unsigned int &cantidadReservas, Anfitrion*& anfitrion);
 Alojamiento **reservaConFiltro(Alojamiento **alojamientos, unsigned int cantidadAlojamientos, Fecha fechaInicio, Fecha fechaFin, string municipio, unsigned int &cantidad, float puntuacion, unsigned int precio);
 template <class T>
 T *buscarUsuario(T **datos, unsigned int cantidad, unsigned char documento[11])

@@ -36,20 +36,40 @@ string validarAnotaciones()
 
 Fecha validarFecha(string id)
 {
-    string dia, mes;
+    string diaStr, mesStr;
     unsigned short int anio;
-    do
-    {
-        cout << "Ingrese el dia de " + id + ": ";
-        cin >> dia;
+    int dia = -1, mes = -1;
 
-        cout << "Ingrese el mes de " + id + ": ";
-        cin >> mes;
+    do {
+        cout << "A continuacion debe ingresar una fecha, tenga en cuenta que hasta que no sea una fecha valida no podra continuar" << endl;
+        do {
+            cout << "Ingrese el dia de " + id + ": ";
+            cin >> diaStr;
+            try {
+                dia = stoi(diaStr);
+            } catch (...) {
+                dia = -1;
+                cout << "Día invalido. Intente nuevamente.\n";
+            }
+        } while (dia < 1 || dia > 31);
+
+
+        do {
+            cout << "Ingrese el mes de " + id + ": ";
+            cin >> mesStr;
+            try {
+                mes = stoi(mesStr);
+            } catch (...) {
+                mes = -1;
+                cout << "Mes invalido. Intente nuevamente.\n";
+            }
+        } while (mes < 1 || mes > 12);
 
         cout << "Ingrese el anio de " + id + ": ";
         cin >> anio;
-    } while (!esValida(static_cast<unsigned char>(stoi(dia)), static_cast<unsigned char>(stoi(mes)), anio));
-    return Fecha(static_cast<unsigned char>(stoi(dia)), static_cast<unsigned char>(stoi(mes)), anio);
+
+    } while (!esValida(static_cast<unsigned char>(dia), static_cast<unsigned char>(mes), anio));
+    return Fecha(static_cast<unsigned char>(dia), static_cast<unsigned char>(mes), anio);
 }
 
 bool validarMetodoDePago()
@@ -735,43 +755,101 @@ void guardarReservas(const std::string &nombreArchivo, Reserva ***reservas, unsi
     archivo.close();
 }
 
-void eliminarReserva(Reserva ***&reservas, unsigned int filasTotales, unsigned int columnasTotales, unsigned int &cantidadReservas)
+void eliminarReservaHuesped(Reserva ***&reservas, unsigned int filasTotales, unsigned int columnasTotales, unsigned int &cantidadReservas, Huesped*& huesped)
 {
-    bool reservaExiste = false;
+    bool reservaExiste = false, reservaPertenece = false;
     unsigned int eliminarReserva = 0;
     cout << "Ingrese el codigo de la reserva a eliminar: ";
     cin >> eliminarReserva;
 
-    for (unsigned int i = 0; i < filasTotales; ++i)
-    {
-        if (!reservas[i])
-            continue;
-
-        for (unsigned int j = 0; j < columnasTotales; ++j)
-        {
-
-            if (!reservas[i][j])
-                continue;
-            if (reservas[i][j]->getCodigoIdentificador() == eliminarReserva)
-            {
-                reservas[i][j]->getHuesped()->eliminarReserva(eliminarReserva);
-                reservas[i][j]->getAlojamientoReserva()->eliminarReserva(eliminarReserva);
-                delete reservas[i][j];
-                reservas[i][j] = nullptr;
-                reservaExiste = true;
-            }
+    for(unsigned int i = 0; i < huesped->getCantidadReservas();i++){
+        if(!huesped->getReservas()[i]) continue;
+        if(huesped->getReservas()[i]->getCodigoIdentificador() == eliminarReserva){
+            reservaPertenece = true;
+            break;
         }
     }
+    if(reservaPertenece){
+        for (unsigned int i = 0; i < filasTotales; ++i)
+        {
+            if (!reservas[i])
+                continue;
+
+            for (unsigned int j = 0; j < columnasTotales; ++j)
+            {
+
+                if (!reservas[i][j])
+                    continue;
+                if (reservas[i][j]->getCodigoIdentificador() == eliminarReserva)
+                {
+                    reservas[i][j]->getHuesped()->eliminarReserva(eliminarReserva);
+                    reservas[i][j]->getAlojamientoReserva()->eliminarReserva(eliminarReserva);
+                    delete reservas[i][j];
+                    reservas[i][j] = nullptr;
+                    reservaExiste = true;
+                }
+            }
+        }}
     if (reservaExiste)
     {
         cout << "Reserva eliminada correctamente";
         cantidadReservas--;
     }
-    else
-    {
-        cout << "Ocurrio un problema: No se encontro la reserva";
+    else{
+        cout << "Ocurrio un problema: La reserva no te pertenece o no se encontro la reserva";
     }
 }
+
+void eliminarReservaAnfitrion(Reserva ***&reservas, unsigned int filasTotales, unsigned int columnasTotales, unsigned int &cantidadReservas, Anfitrion*& anfitrion){
+
+    bool reservaExiste = false, reservaPertenece = false;
+    unsigned int eliminarReserva = 0;
+    cout << "Ingrese el codigo de la reserva a eliminar: ";
+    cin >> eliminarReserva;
+
+    for(unsigned int i = 0; i < anfitrion->getCantidadAlojamientos();i++){
+        //cout << anfitrion->getAlojamientos()[i]->getCantidadReservas() << endl;
+        for(unsigned int j = 0; j < anfitrion->getAlojamientos()[i]->getCantidadReservas();j++){
+            if(!anfitrion->getAlojamientos()[i]->getReservasVigentes()[j]) continue;
+            //cout << anfitrion->getAlojamientos()[i]->getReservasVigentes()[j]->getCodigoIdentificador() << endl;
+            if(anfitrion->getAlojamientos()[i]->getReservasVigentes()[j]->getCodigoIdentificador() == eliminarReserva){
+                reservaPertenece = true;
+                break;
+            }
+        }
+    }
+    if(reservaPertenece){
+        for (unsigned int i = 0; i < filasTotales; ++i)
+        {
+            if (!reservas[i])
+                continue;
+
+            for (unsigned int j = 0; j < columnasTotales; ++j)
+            {
+
+                if (!reservas[i][j])
+                    continue;
+                if (reservas[i][j]->getCodigoIdentificador() == eliminarReserva)
+                {
+                    reservas[i][j]->getHuesped()->eliminarReserva(eliminarReserva);
+                    reservas[i][j]->getAlojamientoReserva()->eliminarReserva(eliminarReserva);
+                    delete reservas[i][j];
+                    reservas[i][j] = nullptr;
+                    reservaExiste = true;
+                }
+            }
+        }}
+    if (reservaExiste)
+    {
+        cout << "Reserva eliminada correctamente";
+        cantidadReservas--;
+    }
+    else{
+        cout << "Ocurrio un problema: La reserva no te pertenece o no se encontro la reserva";
+    }
+
+}
+
 
 Alojamiento **reservaConFiltro(Alojamiento **alojamientos, unsigned int cantidadAlojamientos, Fecha fechaInicio, Fecha fechaFin, string municipio, unsigned int &cantidad, float puntuacion, unsigned int precio)
 {
