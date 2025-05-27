@@ -61,3 +61,9 @@ unsigned char Huesped::getCantidadReservas() const
 {
     return cantidadReservas;
 }
+
+size_t Huesped::tamanio(){
+    size_t tamanio = (sizeof(char)*11) + sizeof(puntuacion) + sizeof(antiguedadMeses) + sizeof(cantidadReservas) +
+                     sizeof(tamReservas) + sizeof(reservas) + (sizeof(Reserva*) * tamReservas);
+    return tamanio;
+}

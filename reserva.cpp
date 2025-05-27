@@ -70,3 +70,9 @@ bool Reserva::getMetodoPago() const
 }
 
 Reserva::~Reserva() {}
+
+size_t Reserva::tamanio(){
+    size_t tamanio = anotaciones.capacity() + 3*sizeof(Fecha) + sizeof(monto) + sizeof(huespedReserva) +
+                     sizeof(alojamientoReserva) + sizeof(codigoReserva) + sizeof(duracion) + sizeof(metodoDePago);
+    return tamanio;
+}

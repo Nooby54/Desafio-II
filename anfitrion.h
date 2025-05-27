@@ -23,6 +23,7 @@ public:
     Alojamiento **getAlojamientos() const;
     void setAlojamientos(Alojamiento **nuevosAlojamientos);
     void consultarReservas(Fecha fechaInicio, Fecha fechaFin, unsigned int &iteraciones);
+    size_t tamanio();
 };
 
 #endif // ANFITRION_H

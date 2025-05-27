@@ -664,12 +664,12 @@ void actualizarHistorico(Reserva ***reservas, Fecha fecha, string nombreArchivo,
     archivo.close();
 }
 
-void guardarAlojamientos(const std::string &nombreArchivo, Alojamiento **alojamientos, int cantidad, unsigned int &iteraciones)
+void guardarArchivos(const string &nombreArchivo, Alojamiento **alojamientos, int cantidad, unsigned int &iteraciones)
 {
     if (!alojamientos)
         return;
 
-    std::ofstream archivo(nombreArchivo);
+    ofstream archivo(nombreArchivo);
     if (!archivo.is_open())
     {
         return;
@@ -686,7 +686,7 @@ void guardarAlojamientos(const std::string &nombreArchivo, Alojamiento **alojami
         archivo << (!a->getNombreAlojamiento().empty() ? a->getNombreAlojamiento() : ", ") << ", ";
 
         unsigned char *doc = a->getAnfitrionRespon()->getDocumento();
-        archivo << (doc ? std::string(reinterpret_cast<char *>(doc), 10) : ", ") << ", ";
+        archivo << (doc ? string(reinterpret_cast<char *>(doc), 10) : ", ") << ", ";
 
         archivo << a->getDepartamento() << ", "
                 << a->getMunicipio() << ", "
@@ -730,15 +730,15 @@ void guardarAlojamientos(const std::string &nombreArchivo, Alojamiento **alojami
     archivo.close();
 }
 
-void guardarHuespedes(const std::string &nombreArchivo, Huesped **huespedes, int cantidad, unsigned int &iteraciones)
+void guardarArchivos(const string &nombreArchivo, Huesped **huespedes, int cantidad, unsigned int &iteraciones)
 {
     if (!huespedes)
         return;
 
-    std::ofstream archivo(nombreArchivo);
+    ofstream archivo(nombreArchivo);
     if (!archivo.is_open())
     {
-        std::cerr << "Error: No se pudo abrir " << nombreArchivo << std::endl;
+        cerr << "Error: No se pudo abrir " << nombreArchivo << endl;
         return;
     }
 
@@ -750,7 +750,7 @@ void guardarHuespedes(const std::string &nombreArchivo, Huesped **huespedes, int
             continue;
 
         unsigned char *doc = h->getDocumento();
-        archivo << (std::string(reinterpret_cast<char *>(doc), 10)) << ", ";
+        archivo << (string(reinterpret_cast<char *>(doc), 10)) << ", ";
         archivo << h->getPuntuacion() << ", " << static_cast<int>(h->getAntiguedadMeses()) << ", ";
 
         Reserva **r = h->getReservas();
@@ -773,9 +773,9 @@ void guardarHuespedes(const std::string &nombreArchivo, Huesped **huespedes, int
     archivo.close();
 }
 
-void guardarReservas(const std::string &nombreArchivo, Reserva ***reservas, unsigned int filas, unsigned int columnas, unsigned int cantidad, unsigned int &iteraciones)
+void guardarArchivos(const string &nombreArchivo, Reserva ***reservas, unsigned int filas, unsigned int columnas, unsigned int cantidad, unsigned int &iteraciones)
 {
-    std::ofstream archivo(nombreArchivo);
+    ofstream archivo(nombreArchivo);
     if (!archivo.is_open())
         return;
 
@@ -972,7 +972,4 @@ void imprimir(Reserva*& reserva){
     cout << "La reserva termina un: " << reserva->getFechaSalida().imprimirFecha() << endl;
 }
 
-void imprimir(unsigned int iteraciones, size_t tamanioObjetos){
-    cout << "Cantidad de iteraciones: " << iteraciones << endl;
-    cout << "Tamanio de los objetos: " << tamanioObjetos << endl;
-}
+

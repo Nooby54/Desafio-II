@@ -58,3 +58,10 @@ void Alojamiento::agregarReserva(Reserva *reserva, unsigned int &iteraciones)
 }
 
 unsigned char Alojamiento::getCantidadReservas() const { return cantidadReservas; }
+
+size_t Alojamiento::tamanio(){
+    size_t  tamanio = nombreAlojamiento.capacity() + sizeof(codigoIdentificador) + sizeof(anfitrionResponsable) +
+               departamento.capacity() + municipio.capacity() + sizeof(tipo) + direccion.capacity() + sizeof(precioNoche)+
+               sizeof(amenidades) + sizeof(reservasVigentes) + (sizeof(Reserva*) * tamReservas) + sizeof(cantidadReservas) + sizeof(tamReservas);
+    return tamanio;
+}

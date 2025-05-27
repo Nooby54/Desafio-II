@@ -80,3 +80,10 @@ void Anfitrion::consultarReservas(Fecha fechaInicio, Fecha fechaFin, unsigned in
         }
     }
 }
+
+size_t Anfitrion::tamanio(){
+    size_t tamanio = (sizeof(char)*11) + sizeof(puntuacion) + sizeof(antiguedadMeses) +
+                     sizeof(cantidadAlojamientos) + sizeof(alojamientos) +
+                     (sizeof(Alojamiento*)*cantidadAlojamientos);
+    return tamanio;
+}

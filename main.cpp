@@ -11,7 +11,7 @@ int main()
 {
     // Variables de tamanio e iteraciones
     unsigned int iteraciones = 0;
-    //size_t tamanioObjetos = 0;
+    size_t tamanioObjetos = 0;
 
     // Cargar archivos
     unsigned int cantidadAlojamientos = 0, cantidadAnfitriones = 0, cantidadReservas = 0, cantidadHuesped = 0, columnasTotales = 0, fila = 0, columna = 0, contadorCodigoReservas = 0;
@@ -349,32 +349,26 @@ int main()
     } while (autenticar != "1" || autenticar != "0");
 
     // Guardar archivos
-    guardarReservas("../../data/reservas.txt", reservas, filasTotales, columnasTotales, contadorCodigoReservas, iteraciones);
-    guardarHuespedes("../../data/huesped.txt", huespedes, cantidadHuesped, iteraciones);
-    guardarAlojamientos("../../data/alojamientos.txt", alojamientos, cantidadAlojamientos, iteraciones);
+    guardarArchivos("../../data/reservas.txt", reservas, filasTotales, columnasTotales, contadorCodigoReservas, iteraciones);
+    guardarArchivos("../../data/huesped.txt", huespedes, cantidadHuesped, iteraciones);
+    guardarArchivos("../../data/alojamientos.txt", alojamientos, cantidadAlojamientos, iteraciones);
 
     // Liberar memoria
     // Alojamientos
     for (unsigned int i = 0; i < cantidadAlojamientos; ++i)
     {
+        iteraciones++;
+        tamanioObjetos+= alojamientos[i]->tamanio();
         delete alojamientos[i];
     }
     delete[] alojamientos;
 
-    // Reservas
-    for (unsigned int i = 0; i < filasTotales; ++i)
-    {
-        for (unsigned int j = 0; j < columnasTotales; ++j)
-        {
-            delete reservas[i][j];
-        }
-        delete[] reservas[i];
-    }
-    delete[] reservas;
 
     // Anfitriones
     for (unsigned int i = 0; i < cantidadAnfitriones; ++i)
     {
+        iteraciones++;
+        tamanioObjetos+= anfitriones[i]->tamanio();
         delete anfitriones[i];
     }
     delete[] anfitriones;
@@ -382,8 +376,30 @@ int main()
     // Huespedes
     for (unsigned int i = 0; i < cantidadHuesped; ++i)
     {
+        iteraciones++;
+        tamanioObjetos += huespedes[i]->tamanio();
         delete huespedes[i];
     }
     delete[] huespedes;
+
+    // Reservas
+    for (unsigned int i = 0; i < filasTotales; ++i)
+    {
+        iteraciones++;
+        for (unsigned int j = 0; j < columnasTotales; ++j)
+        {
+            iteraciones++;
+            if(reservas[i][j])
+                tamanioObjetos += reservas[i][j]->tamanio();
+            delete reservas[i][j];
+        }
+        delete[] reservas[i];
+    }
+    delete[] reservas;
+
+    cout << "----------------------------------------" << endl;
+    cout << "Cantidad de iteraciones: " << iteraciones << endl;
+    cout << "Tamanio de los objetos: " << tamanioObjetos << endl;
+
     return 0;
 }

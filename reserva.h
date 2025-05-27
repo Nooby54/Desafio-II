@@ -44,8 +44,8 @@ public:
     unsigned int getCodigoIdentificador() const;
     unsigned char getDuracion() const;
     bool getMetodoPago() const;
-
     ~Reserva();
+    size_t tamanio();
 };
 
 #endif // RESERVA_H

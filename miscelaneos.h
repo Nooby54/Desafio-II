@@ -22,14 +22,13 @@ Reserva *buscarReservaPorCodigo(Reserva ***reservas, unsigned int filas, unsigne
 Huesped **cargarHuesped(string nombreArchivo, unsigned int &cantidad, Reserva ***reservasTotales, unsigned int filas, unsigned int bloques, unsigned int &iteraciones);
 bool interseccionFechas(Alojamiento *alojamiento, Huesped *huesped, Fecha fechaInicio, Fecha fechaFin, unsigned int &iteraciones);
 void actualizarHistorico(Reserva ***reservas, Fecha fecha, string nombreArchivo, unsigned int &cantidad, unsigned int filas, unsigned int columnas, unsigned int &iteraciones);
-void guardarReservas(const std::string &nombreArchivo, Reserva ***reservas, unsigned int filas, unsigned int columnas, unsigned int cantidad, unsigned int &iteraciones);
-void guardarHuespedes(const std::string &nombreArchivo, Huesped **huespedes, int cantidad, unsigned int &iteraciones);
-void guardarAlojamientos(const std::string &nombreArchivo, Alojamiento **alojamientos, int cantidad, unsigned int &iteraciones);
+void guardarArchivos(const string &nombreArchivo, Reserva ***reservas, unsigned int filas, unsigned int columnas, unsigned int cantidad, unsigned int &iteraciones);
+void guardarArchivos(const string &nombreArchivo, Huesped **huespedes, int cantidad, unsigned int &iteraciones);
+void guardarArchivos(const string &nombreArchivo, Alojamiento **alojamientos, int cantidad, unsigned int &iteraciones);
 void eliminarReserva(Reserva ***&reservas, unsigned int filasTotales, unsigned int columnasTotales, unsigned int &cantidadReservas, Huesped*& huesped, unsigned int &iteraciones);
 void eliminarReserva(Reserva ***&reservas, unsigned int filasTotales, unsigned int columnasTotales, unsigned int &cantidadReservas, Anfitrion*& anfitrion, unsigned int &iteraciones);
 Alojamiento **reservaConFiltro(Alojamiento **alojamientos, unsigned int cantidadAlojamientos, Fecha fechaInicio, Fecha fechaFin, string municipio, unsigned int &cantidad, float puntuacion, unsigned int precio, unsigned int &iteraciones);
 void imprimir(Reserva*& reserva);
-void imprimir(unsigned int iteraciones, size_t tamanioObjetos);
 template <class T>
 T *buscarUsuario(T **datos, unsigned int cantidad, unsigned char documento[11], unsigned int &iteraciones)
 {

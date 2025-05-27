@@ -43,6 +43,7 @@ public:
     void eliminarReserva(unsigned int codigoReserva, unsigned int &iteraciones);
     void agregarReserva(Reserva *reserva, unsigned int &iteraciones);
     unsigned char getCantidadReservas() const;
+    size_t tamanio();
 };
 
 #endif // ALOJAMIENTO_H

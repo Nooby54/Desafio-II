@@ -2,6 +2,7 @@
 #define FECHA_H
 
 #include <string>
+using namespace std;
 
 class Fecha
 {
@@ -18,8 +19,8 @@ public:
     ~Fecha();
 
     Fecha calcularFechaDias(unsigned short int dias, unsigned int &iteraciones);
-    std::string obtenerDiaSemana() const;
-    std::string imprimirFecha() const;
+    string obtenerDiaSemana() const;
+    string imprimirFecha() const;
 
     unsigned char getDia() const;
     unsigned short int getAnio() const;

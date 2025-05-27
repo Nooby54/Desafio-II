@@ -21,6 +21,7 @@ public:
     float getPuntuacion();
     unsigned char getAntiguedadMeses();
     unsigned char getCantidadReservas() const;
+    size_t tamanio();
 };
 
 #endif // HUESPED_H
