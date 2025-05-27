@@ -73,15 +73,18 @@ int main()
                 string modo = "";
                 do
                 {
-                    cout << endl << "1 para reservar de forma general.\n2 para reservar por codigo.\n3 para eliminar una reserva.\n4 para salir\nEscoge un modo: ";
+                    cout << endl
+                         << "1 para reservar de forma general.\n2 para reservar por codigo.\n3 para eliminar una reserva.\n4 para salir\nEscoge un modo: ";
                     cin >> modo;
 
                     if (modo == "1")
                     {
                         unsigned int cantidadAlRe = 0;
                         Fecha fechaInicio = validarFecha("inicio reserva");
-                        while(fechaInicio < fechaCorte || fechaMaxima < fechaInicio){
-                            cout << endl << "La fecha debe ser mayor a la fecha de corte" << endl;
+                        while (fechaInicio < fechaCorte || fechaMaxima < fechaInicio)
+                        {
+                            cout << endl
+                                 << "La fecha debe ser mayor a la fecha de corte" << endl;
                             fechaInicio = validarFecha("inicio reserva");
                         }
                         string sDuracion;
@@ -124,49 +127,116 @@ int main()
 
                         Alojamiento **alojamientosReservas = reservaConFiltro(alojamientos, cantidadAlojamientos, fechaInicio, fechaSalida, municipio, cantidadAlRe, puntuacion, precio);
 
-                        cout << "Cantidad Alojamientos Reservas: " <<cantidadAlRe << endl;
-                        if(cantidadAlRe == 0){
-                            cout << endl << "No hay alojamientos disponibles o no existen alojamientos que satisfagan tus preferencias";
+                        cout << "Cantidad Alojamientos Reservas: " << cantidadAlRe << endl;
+                        if (cantidadAlRe == 0)
+                        {
+                            cout << endl
+                                 << "No hay alojamientos disponibles o no existen alojamientos que satisfagan tus preferencias";
                         }
-                        else{
+                        else
+                        {
                             unsigned int codigoReserva = 0;
                             cout << "Ingrese el codigo del alojamiento que quiere reservar: ";
                             cin >> codigoReserva;
-                        for (unsigned int i = 0; i < cantidadAlRe; i++)
-                        {
-                            if (alojamientosReservas[i] && alojamientosReservas[i]->getCodigoIdentificador() == codigoReserva)
+                            for (unsigned int i = 0; i < cantidadAlRe; i++)
                             {
-                                string anotaciones = validarAnotaciones();
-                                Fecha fechaPago = validarFecha("fecha de pago");
-                                bool mPago = validarMetodoDePago();
-                                fila++;
-                                columna++;
-                                contadorCodigoReservas++;
-                                reservas[fila][columna] = new Reserva(anotaciones, fechaInicio, fechaSalida, fechaPago, alojamientosReservas[i]->getPrecioNoche() * duracion, usuario, alojamientosReservas[i], contadorCodigoReservas, duracion, mPago);
-                                alojamientosReservas[i]->agregarReserva(reservas[fila][columna]);
-                                usuario->agregarReserva(reservas[fila][columna]);
+                                if (alojamientosReservas[i] && alojamientosReservas[i]->getCodigoIdentificador() == codigoReserva)
+                                {
+
+                                    string anotaciones = validarAnotaciones();
+                                    Fecha fechaPago = validarFecha("fecha de pago");
+                                    bool mPago = validarMetodoDePago();
+
+                                    // Si se llega al final de la columna actual
+                                    if (columna >= columnasTotales)
+                                    {
+                                        columna = -1;
+                                        fila++;
+
+                                        // Si también se llega al final de las filas actuales
+                                        if (fila >= filasTotales)
+                                        {
+
+                                            // Aumentar el tamaño de filas
+                                            unsigned int nuevasFilasTotales = filasTotales + 5;
+                                            Reserva ***nuevo = new Reserva **[nuevasFilasTotales];
+
+                                            // Copiar punteros existentes
+                                            for (unsigned int i = 0; i < filasTotales; i++)
+                                            {
+                                                nuevo[i] = reservas[i];
+                                            }
+
+                                            // Inicializar nuevas filas
+                                            for (unsigned int i = filasTotales; i < nuevasFilasTotales; i++)
+                                            {
+                                                nuevo[i] = new Reserva *[columnasTotales];
+                                                for (unsigned int j = 0; j < columnasTotales; j++)
+                                                {
+                                                    nuevo[i][j] = nullptr;
+                                                }
+                                            }
+
+                                            delete[] reservas;
+
+                                            reservas = nuevo;
+                                            filasTotales = nuevasFilasTotales;
+                                        }
+
+                                        if (!reservas[fila])
+                                        {
+                                            reservas[fila] = new Reserva *[columnasTotales];
+                                            for (unsigned int j = 0; j < columnasTotales; j++)
+                                            {
+                                                reservas[fila][j] = nullptr;
+                                            }
+                                        }
+                                    }
+
+                                    columna++;
+                                    contadorCodigoReservas++;
+                                    reservas[fila][columna] = new Reserva(anotaciones, fechaInicio, fechaSalida, fechaPago,
+                                                                          alojamientosReservas[i]->getPrecioNoche() * duracion,
+                                                                          usuario, alojamientosReservas[i], contadorCodigoReservas,
+                                                                          duracion, mPago);
+
+                                    alojamientosReservas[i]->agregarReserva(reservas[fila][columna]);
+                                    usuario->agregarReserva(reservas[fila][columna]);
+                                }
                             }
                         }
-                        }}
+                    }
                     else if (modo == "2")
                     {
                         Fecha fechaInicio = validarFecha("inicio reserva");
-                        while(fechaInicio < fechaCorte || fechaMaxima < fechaInicio){
-                            cout << endl << "La fecha debe ser mayor a la fecha de corte" << endl;
+                        while (fechaInicio < fechaCorte || fechaMaxima < fechaInicio)
+                        {
+                            cout << endl
+                                 << "La fecha debe ser mayor a la fecha de corte" << endl;
                             fechaInicio = validarFecha("inicio reserva");
                         }
                         string sDuracion;
                         unsigned int duracionTemporal = 0;
-                        do {
-                            cout << endl << "Ingrese la duracion de su reserva (en cantidad de noches): ";
+                        do
+                        {
+                            cout << endl
+                                 << "Ingrese la duracion de su reserva (en cantidad de noches): ";
                             cin >> sDuracion;
-                            try {
+                            try
+                            {
                                 duracionTemporal = stoi(sDuracion);
-                            } catch (...) {
-                                duracionTemporal = 0;
-                                cout << "Día invalido. Intente nuevamente.\n";
+                                if (duracionTemporal > UCHAR_MAX)
+                                {
+                                    cout << "La duracion es demasiado larga, maximo puedes reservas por " << UCHAR_MAX << " dias" << endl;
+                                    duracionTemporal = 0;
+                                }
                             }
-                        } while (duracionTemporal > 0);
+                            catch (...)
+                            {
+                                duracionTemporal = 0;
+                                cout << "Cantidad invalida. Intente nuevamente." << endl;
+                            }
+                        } while (duracionTemporal == 0);
                         unsigned char duracion = static_cast<unsigned char>(stoi(sDuracion));
 
                         Fecha fechaSalida = fechaInicio.calcularFechaDias(duracion);
@@ -189,10 +259,58 @@ int main()
                                     string anotaciones = validarAnotaciones();
                                     Fecha fechaPago = validarFecha("fecha de pago");
                                     bool mPago = validarMetodoDePago();
-                                    fila++;
-                                    columna++;
+                                    // Si se llega al final de la columna actual
+                                    if (columna >= columnasTotales)
+                                    {
+                                        columna = 0;
+                                        fila++;
+
+                                        // Si también se llega al final de las filas actuales
+                                        if (fila >= filasTotales)
+                                        {
+                                            // Aumentar el tamaño de filas
+                                            unsigned int nuevasFilasTotales = filasTotales + 5;
+                                            Reserva ***nuevo = new Reserva **[nuevasFilasTotales];
+
+                                            // Copiar punteros existentes
+                                            for (unsigned int i = 0; i < filasTotales; i++)
+                                            {
+                                                nuevo[i] = reservas[i];
+                                            }
+
+                                            // Inicializar nuevas filas
+                                            for (unsigned int i = filasTotales; i < nuevasFilasTotales; i++)
+                                            {
+                                                nuevo[i] = new Reserva *[columnasTotales];
+                                                for (unsigned int j = 0; j < columnasTotales; j++)
+                                                {
+                                                    nuevo[i][j] = nullptr;
+                                                }
+                                            }
+
+                                            delete[] reservas;
+
+                                            reservas = nuevo;
+                                            filasTotales = nuevasFilasTotales;
+                                        }
+
+                                        if (!reservas[fila])
+                                        {
+                                            reservas[fila] = new Reserva *[columnasTotales];
+                                            for (unsigned int j = 0; j < columnasTotales; j++)
+                                            {
+                                                reservas[fila][j] = nullptr;
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        columna++;
+                                    }
+
                                     contadorCodigoReservas++;
                                     reservas[fila][columna] = new Reserva(anotaciones, fechaInicio, fechaSalida, fechaPago, alTemp->getPrecioNoche() * duracion, usuario, alTemp, contadorCodigoReservas, duracion, mPago);
+
                                     alTemp->agregarReserva(reservas[fila][columna]);
                                     usuario->agregarReserva(reservas[fila][columna]);
                                 }
