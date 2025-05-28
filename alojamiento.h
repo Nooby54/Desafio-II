@@ -11,36 +11,39 @@ class Alojamiento
 private:
     string nombreAlojamiento;
     unsigned int codigoIdentificador;
-    Anfitrion* anfitrionResponsable;
+    Anfitrion *anfitrionResponsable;
     string departamento;
     string municipio;
     bool tipo;
     string direccion;
     unsigned int precioNoche;
     bool amenidades[5];
-    Reserva** reservasVigentes;
+    Reserva **reservasVigentes;
     unsigned char cantidadReservas;
+    unsigned char tamReservas;
 
 public:
-    Alojamiento(string nombre, unsigned int codigo, Anfitrion* anfitrion,
+    Alojamiento(string nombre, unsigned int codigo, Anfitrion *anfitrion,
                 string depto, string mun, bool tipoAloj, string dir,
-                unsigned int precio, bool ameni[5], Reserva** reservas, unsigned char cantidad);
+                unsigned int precio, bool ameni[5], Reserva **reservas, unsigned char cantidad);
 
     ~Alojamiento();
 
     string getNombreAlojamiento() const;
     unsigned int getCodigoIdentificador() const;
-    Anfitrion* getAnfitrionRespon() const;
-    void setAnfitrionResponsable(Anfitrion* anfitrion);
+    Anfitrion *getAnfitrionRespon() const;
+    void setAnfitrionResponsable(Anfitrion *anfitrion);
     string getDepartamento() const;
     string getMunicipio() const;
     bool getTipo() const;
     string getDireccion() const;
     unsigned int getPrecioNoche() const;
-    bool* getAmenidades();
-    Reserva** getReservasVigentes() const;
-    void redimensionarReservas();
+    bool *getAmenidades();
+    Reserva **getReservasVigentes() const;
+    void eliminarReserva(unsigned int codigoReserva, unsigned int &iteraciones);
+    void agregarReserva(Reserva *reserva, unsigned int &iteraciones);
     unsigned char getCantidadReservas() const;
+    size_t tamanio();
 };
 
 #endif // ALOJAMIENTO_H

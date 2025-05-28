@@ -39,15 +39,18 @@ unsigned int Reserva::getMonto() const
     return monto;
 }
 
-Huesped *Reserva::getHuesped() const{
+Huesped *Reserva::getHuesped() const
+{
     return huespedReserva;
 }
 
-void Reserva::setHuesped(Huesped* huesped){
+void Reserva::setHuesped(Huesped *huesped)
+{
     huespedReserva = huesped;
 }
 
-Alojamiento *Reserva::getAlojamientoReserva() const{
+Alojamiento *Reserva::getAlojamientoReserva() const
+{
     return alojamientoReserva;
 }
 
@@ -67,3 +70,9 @@ bool Reserva::getMetodoPago() const
 }
 
 Reserva::~Reserva() {}
+
+size_t Reserva::tamanio(){
+    size_t tamanio = anotaciones.capacity() + 3*sizeof(Fecha) + sizeof(monto) + sizeof(huespedReserva) +
+                     sizeof(alojamientoReserva) + sizeof(codigoReserva) + sizeof(duracion) + sizeof(metodoDePago);
+    return tamanio;
+}

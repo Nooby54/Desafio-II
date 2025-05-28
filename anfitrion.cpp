@@ -1,64 +1,71 @@
 #include "anfitrion.h"
 #include "alojamiento.h"
 #include "huesped.h"
-#include <iostream>
 
+#include<iostream>
+using namespace std;
 
-Anfitrion::Anfitrion(unsigned char (&documento)[11], float p, unsigned char antiguedad, unsigned char cAl, Alojamiento** alojamientos)
+Anfitrion::Anfitrion(unsigned char (&documento)[11], float p, unsigned char antiguedad, unsigned char cAl, Alojamiento **alojamientos)
     : puntuacion(p), antiguedadMeses(antiguedad), cantidadAlojamientos(cAl), alojamientos(alojamientos)
 {
-    for (unsigned char i = 0; i < 11; i++)
-        documentoAnfitrion[i] = documento[i];
+    memcpy(documentoAnfitrion, documento, 11*sizeof(char));
 }
-
 
 Anfitrion::~Anfitrion() {}
 
-
-unsigned char* Anfitrion::getDocumentoAnfitrion() { return documentoAnfitrion; }
+unsigned char *Anfitrion::getDocumento() { return documentoAnfitrion; }
 float Anfitrion::getPuntuacion() const { return puntuacion; }
 unsigned char Anfitrion::getAntiguedadMeses() const { return antiguedadMeses; }
-unsigned char Anfitrion::getCantidadAlojamientos() const {return cantidadAlojamientos;}
-Alojamiento** Anfitrion::getAlojamientos() const { return alojamientos; }
-void Anfitrion::setAlojamientos(Alojamiento** nuevosAlojamientos)
+unsigned char Anfitrion::getCantidadAlojamientos() const { return cantidadAlojamientos; }
+Alojamiento **Anfitrion::getAlojamientos() const { return alojamientos; }
+void Anfitrion::setAlojamientos(Alojamiento **nuevosAlojamientos)
 {
     alojamientos = nuevosAlojamientos;
 }
 
-void Anfitrion::consultarReservas(Fecha fechaInicio, Fecha fechaFin)
+void Anfitrion::consultarReservas(Fecha fechaInicio, Fecha fechaFin, unsigned int &iteraciones)
 {
-    for(unsigned int i = 0; i < cantidadAlojamientos; i++){
-        for(unsigned char r = 0; r < this->alojamientos[i]->getCantidadReservas(); r++){
-            Reserva* reserva = this->alojamientos[i]->getReservasVigentes()[r];
-            if(reserva->getFechaEntrada() >= fechaInicio && reserva->getFechaEntrada() <= fechaFin){
-                //cout << this->alojamientos[i]->getReservasVigentes()[r]->getCodigoIdentificador() << endl;
-
+    for (unsigned int i = 0; i < cantidadAlojamientos; i++)
+    {
+        iteraciones++;
+        for (unsigned char r = 0; r < this->alojamientos[i]->getCantidadReservas(); r++)
+        {
+            iteraciones++;
+            Reserva *reserva = this->alojamientos[i]->getReservasVigentes()[r];
+            if (reserva->getFechaEntrada() >= fechaInicio && reserva->getFechaEntrada() <= fechaFin)
+            {
                 cout << "------------------------\n";
                 cout << "Reserva #" << reserva->getCodigoIdentificador() << "\n";
 
                 // Alojamiento
-                Alojamiento* a = reserva->getAlojamientoReserva();
-                if (a != nullptr) {
+                Alojamiento *a = reserva->getAlojamientoReserva();
+                if (a != nullptr)
+                {
                     cout << "  Alojamiento: " << a->getNombreAlojamiento() << "\n";
-                } else {
+                }
+                else
+                {
                     cout << "  Alojamiento: No asignado\n";
                 }
 
                 // Huésped
-                Huesped* h = reserva->getHuesped();
-                if (h != nullptr) {
+                Huesped *h = reserva->getHuesped();
+                if (h != nullptr)
+                {
                     cout << "  Huesped: ";
-                    unsigned char* docHuesped = h->getDocumento();
-                    for (int j = 0; j < 11; ++j) {
+                    unsigned char *docHuesped = h->getDocumento();
+                    for (int j = 0; j < 11; ++j)
+                    {
                         cout << docHuesped[j];
                     }
                     cout << "\n";
-                } else {
+                }
+                else
+                {
                     cout << "  Huesped: [no asignado aun]\n";
                 }
 
                 // Fechas
-                //cout << "fechas" << endl;
                 cout << "  Fecha de Entrada: " << reserva->getFechaEntrada().imprimirFecha() << "\n";
                 cout << "  Fecha de Salida : " << reserva->getFechaSalida().imprimirFecha() << "\n";
                 cout << "  Fecha de Pago   : " << reserva->getFechaPago().imprimirFecha() << "\n";
@@ -72,4 +79,11 @@ void Anfitrion::consultarReservas(Fecha fechaInicio, Fecha fechaFin)
             }
         }
     }
+}
+
+size_t Anfitrion::tamanio(){
+    size_t tamanio = (sizeof(char)*11) + sizeof(puntuacion) + sizeof(antiguedadMeses) +
+                     sizeof(cantidadAlojamientos) + sizeof(alojamientos) +
+                     (sizeof(Alojamiento*)*cantidadAlojamientos);
+    return tamanio;
 }
