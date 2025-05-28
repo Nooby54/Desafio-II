@@ -25,6 +25,18 @@ void Anfitrion::setAlojamientos(Alojamiento **nuevosAlojamientos)
 
 void Anfitrion::consultarReservas(Fecha fechaInicio, Fecha fechaFin, unsigned int &iteraciones)
 {
+    /**
+ * @brief Consulta y muestra reservas dentro de un rango de fechas.
+ *
+ * Recorre todos los alojamientos del anfitrión y sus reservas vigentes.
+ * Si la fecha de entrada de una reserva está entre `fechaInicio` y `fechaFin`, se imprime la información detallada.
+ *
+ * @param fechaInicio Fecha de inicio del rango de búsqueda.
+ * @param fechaFin Fecha de fin del rango de búsqueda.
+ * @param iteraciones Variable de conteo para medir el número de iteraciones realizadas (útil para análisis de eficiencia).
+ */
+
+    // Recorre todos los alojamientos del anfitrión
     for (unsigned int i = 0; i < cantidadAlojamientos; i++)
     {
         iteraciones++;
@@ -81,7 +93,16 @@ void Anfitrion::consultarReservas(Fecha fechaInicio, Fecha fechaFin, unsigned in
     }
 }
 
-size_t Anfitrion::tamanio(){
+size_t Anfitrion::tamanio()
+{
+    /**
+ * @brief Calcula el tamaño aproximado en memoria del objeto Anfitrion.
+ *
+ * Suma el tamaño de todos los atributos del anfitrión, incluyendo el arreglo de punteros a alojamientos.
+ * Este cálculo es útil para propósitos de serialización o análisis de uso de memoria.
+ *
+ * @return Tamaño en bytes del objeto.
+ */
     size_t tamanio = (sizeof(char)*11) + sizeof(puntuacion) + sizeof(antiguedadMeses) +
                      sizeof(cantidadAlojamientos) + sizeof(alojamientos) +
                      (sizeof(Alojamiento*)*cantidadAlojamientos);

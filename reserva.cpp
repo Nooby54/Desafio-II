@@ -71,7 +71,15 @@ bool Reserva::getMetodoPago() const
 
 Reserva::~Reserva() {}
 
-size_t Reserva::tamanio(){
+size_t Reserva::tamanio()
+{
+    /**
+ * Calcula un estimado del tamaño en bytes que ocupa el objeto Reserva en memoria.
+ * Incluye capacidad de la cadena de anotaciones, objetos Fecha, y demás atributos básicos y punteros.
+ *
+ * @return Tamaño aproximado en bytes del objeto.
+ */
+
     size_t tamanio = anotaciones.capacity() + 3*sizeof(Fecha) + sizeof(monto) + sizeof(huespedReserva) +
                      sizeof(alojamientoReserva) + sizeof(codigoReserva) + sizeof(duracion) + sizeof(metodoDePago);
     return tamanio;

@@ -14,6 +14,13 @@ Reserva **Huesped::getReservas() const
 
 void Huesped::agregarReserva(Reserva *reserva, unsigned int &iteraciones)
 {
+    /**
+ * Agrega una nueva reserva al arreglo de reservas del huésped.
+ * Si el arreglo está lleno, se redimensiona para ampliar su capacidad.
+ *
+ * @param reserva Puntero a la reserva que se agregará.
+ * @param iteraciones Referencia a un contador de iteraciones para medir operaciones.
+ */
     if (this->cantidadReservas == this->tamReservas)
     {
         redimensionarArreglo<Reserva>(this->reservas, this->tamReservas, this->tamReservas + 6, iteraciones);
@@ -25,6 +32,13 @@ void Huesped::agregarReserva(Reserva *reserva, unsigned int &iteraciones)
 
 void Huesped::eliminarReserva(unsigned int codigoReserva, unsigned int &iteraciones)
 {
+    /**
+ * Elimina una reserva del huésped según su código identificador.
+ * Se desplazan las reservas restantes para mantener el arreglo compacto.
+ *
+ * @param codigoReserva Código identificador de la reserva a eliminar.
+ * @param iteraciones Referencia a un contador para medir operaciones realizadas.
+ */
     unsigned char k = 0;
     for (unsigned int i = 0; i < cantidadReservas; i++)
     {
@@ -62,7 +76,14 @@ unsigned char Huesped::getCantidadReservas() const
     return cantidadReservas;
 }
 
-size_t Huesped::tamanio(){
+size_t Huesped::tamanio()
+{
+    /**
+ * Calcula un estimado del tamaño en bytes que ocupa el objeto Huesped en memoria.
+ * Considera campos básicos, punteros y arreglo dinámico de reservas.
+ *
+ * @return Tamaño aproximado en bytes del objeto.
+ */
     size_t tamanio = (sizeof(char)*11) + sizeof(puntuacion) + sizeof(antiguedadMeses) + sizeof(cantidadReservas) +
                      sizeof(tamReservas) + sizeof(reservas) + (sizeof(Reserva*) * tamReservas);
     return tamanio;
