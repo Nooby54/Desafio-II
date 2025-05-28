@@ -18,7 +18,8 @@ public:
     Fecha(unsigned char d, unsigned char m, unsigned short int a);
     ~Fecha();
 
-    Fecha calcularFechaDias(unsigned short int dias, unsigned int &iteraciones);
+    Fecha calcularFecha(unsigned short int dias, unsigned int &iteraciones);
+    Fecha calcularFecha();
     string obtenerDiaSemana() const;
     string imprimirFecha() const;
 

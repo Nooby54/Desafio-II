@@ -9,16 +9,20 @@ Fecha::Fecha(unsigned char d, unsigned char m, unsigned short int a)
 
 Fecha::~Fecha() {}
 
-Fecha Fecha::calcularFechaDias(unsigned short int dias, unsigned int &iteraciones)
+Fecha Fecha::calcularFecha(unsigned short int dias, unsigned int &iteraciones)
 {
     Fecha nuevaFecha = *this;
     iteraciones+=dias;
-    if (dias > 0)
-        nuevaFecha += dias;
-    else if (dias < 0)
-        nuevaFecha -= -dias;
+    nuevaFecha += dias;
 
     return nuevaFecha;
+}
+
+Fecha Fecha::calcularFecha(){
+    Fecha fechaMaxima = *this;
+    fechaMaxima.anio+=1;
+
+    return fechaMaxima;
 }
 
 unsigned char Fecha::obtenerDiasMes() const

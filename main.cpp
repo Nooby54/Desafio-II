@@ -25,7 +25,7 @@ int main()
     cout << "----------------------------------------" << endl;
     cout << "Fecha de corte" << endl;
     Fecha fechaCorte = validarFecha("la fecha de corte",iteraciones);
-    Fecha fechaMaxima = fechaCorte.calcularFechaDias(365, iteraciones);
+    Fecha fechaMaxima = fechaCorte.calcularFecha();
     actualizarHistorico(reservas, fechaCorte, "../../data/historico.txt", cantidadReservas, fila+1, columnasTotales,iteraciones);
     cout << endl;
     // Ciclo
@@ -101,7 +101,7 @@ int main()
                         cout << endl;
 
                         unsigned char duracion = static_cast<unsigned char>(stoi(sDuracion));
-                        Fecha fechaSalida = fechaInicio.calcularFechaDias(duracion,iteraciones);
+                        Fecha fechaSalida = fechaInicio.calcularFecha(duracion,iteraciones);
                         string municipio;
                         float puntuacion = 0;
                         unsigned int precio = UINT_MAX;
@@ -248,7 +248,7 @@ int main()
                         } while (duracionTemporal == 0);
                         unsigned char duracion = static_cast<unsigned char>(stoi(sDuracion));
 
-                        Fecha fechaSalida = fechaInicio.calcularFechaDias(duracion,iteraciones);
+                        Fecha fechaSalida = fechaInicio.calcularFecha(duracion,iteraciones);
 
                         unsigned int codigoAlojamiento = 0;
                         cout << "Ingrese el codigo del alojamiento: ";
