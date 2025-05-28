@@ -19,14 +19,14 @@ int main()
     Anfitrion **anfitriones = cargarAnfitriones("../../data/anfitrion.txt", cantidadAnfitriones, alojamientos, cantidadAlojamientos, iteraciones);
     Reserva ***reservas = cargarReserva("../../data/reservas.txt", cantidadReservas, columnasTotales, fila, columna, contadorCodigoReservas, alojamientos, cantidadAlojamientos, iteraciones);
     unsigned int filasTotales = columnasTotales * 2;
-    Huesped **huespedes = cargarHuesped("../../data/huesped.txt", cantidadHuesped, reservas, filasTotales, columnasTotales, iteraciones);
+    Huesped **huespedes = cargarHuesped("../../data/huesped.txt", cantidadHuesped, reservas, fila+1, columnasTotales, iteraciones);
 
     // Fecha de corte y actualizacion de historico
     cout << "----------------------------------------" << endl;
     cout << "Fecha de corte" << endl;
     Fecha fechaCorte = validarFecha("la fecha de corte",iteraciones);
     Fecha fechaMaxima = fechaCorte.calcularFechaDias(365, iteraciones);
-    actualizarHistorico(reservas, fechaCorte, "../../data/historico.txt", cantidadReservas, filasTotales, columnasTotales,iteraciones);
+    actualizarHistorico(reservas, fechaCorte, "../../data/historico.txt", cantidadReservas, fila+1, columnasTotales,iteraciones);
     cout << endl;
     // Ciclo
     string autenticar;
@@ -67,7 +67,7 @@ int main()
                     else if (modo == "2")
                     {
                         cout << "----------------------------------------" << endl;
-                        eliminarReserva(reservas, filasTotales, columnasTotales, cantidadReservas, usuarioAnfitrion, iteraciones);
+                        eliminarReserva(reservas, fila+1, columnasTotales, cantidadReservas, usuarioAnfitrion, iteraciones);
                     }
                     else if (modo == "3")
                     {
@@ -329,7 +329,7 @@ int main()
                     else if (modo == "3")
                     {
                         cout << "----------------------------------------" << endl;
-                        eliminarReserva(reservas, filasTotales, columnasTotales, cantidadReservas, usuarioHuesped, iteraciones);
+                        eliminarReserva(reservas, fila+1, columnasTotales, cantidadReservas, usuarioHuesped, iteraciones);
                     }
                     else if (modo == "4")
                     {
@@ -383,10 +383,10 @@ int main()
     delete[] huespedes;
 
     // Reservas
-    for (unsigned int i = 0; i < filasTotales; ++i)
+    for (unsigned int i = 0; i < fila; i++)
     {
         iteraciones++;
-        for (unsigned int j = 0; j < columnasTotales; ++j)
+        for (unsigned int j = 0; j < columnasTotales; j++)
         {
             iteraciones++;
             if(reservas[i][j])
