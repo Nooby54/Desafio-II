@@ -26,7 +26,6 @@ int main()
     cout << "Fecha de corte" << endl;
     Fecha fechaCorte = validarFecha("la fecha de corte",iteraciones);
     Fecha fechaMaxima = fechaCorte.calcularFecha();
-    actualizarHistorico(reservas, fechaCorte, "../../data/historico.txt", cantidadReservas, fila+1, columnasTotales,iteraciones);
     cout << endl;
     // Ciclo
     string autenticar;
@@ -349,6 +348,7 @@ int main()
     } while (autenticar != "1" || autenticar != "0");
 
     // Guardar archivos
+    actualizarHistorico(reservas, fechaCorte, "../../data/historico.txt", cantidadReservas, fila+1, columnasTotales,iteraciones);
     guardarArchivos("../../data/reservas.txt", reservas, filasTotales, columnasTotales, contadorCodigoReservas, iteraciones);
     guardarArchivos("../../data/huesped.txt", huespedes, cantidadHuesped, iteraciones);
     guardarArchivos("../../data/alojamientos.txt", alojamientos, cantidadAlojamientos, iteraciones);
